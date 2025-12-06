@@ -237,7 +237,7 @@ MIT License
 
 ## 👤 Autor
 
-[Tu Nombre]
+Fran
 
 ## 🤝 Contribuciones
 
