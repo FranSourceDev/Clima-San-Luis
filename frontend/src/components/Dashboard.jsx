@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import TemperatureChart from './TemperatureChart';
+import TemperatureMap from './TemperatureMap';
 import StationCard from './StationCard';
 
 const API_URL = 'http://localhost:5000/api';
@@ -188,6 +189,11 @@ export default function Dashboard() {
       {/* Gráfico de temperaturas */}
       {estaciones.length > 0 && (
         <TemperatureChart estaciones={estaciones} maxItems={25} />
+      )}
+
+      {/* Mapa de temperaturas */}
+      {estaciones.length > 0 && (
+        <TemperatureMap estaciones={estaciones} />
       )}
 
       {/* Pronóstico extendido */}
