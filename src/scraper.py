@@ -1,0 +1,449 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+import json
+import sys
+import os
+
+# Agregar el directorio raíz al path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from config.settings import URL_CLIMA, REQUEST_TIMEOUT, REQUEST_HEADERS
+from src.utils import setup_logger, retry, limpiar_texto
+
+
+logger = setup_logger()
+
+
+@retry(max_attempts=3, delay=5)
+def obtener_html(url=None):
+    """
+    Obtiene el HTML del sitio web de clima.
+    
+    Args:
+        url: URL a consultar (usa URL_CLIMA por defecto)
+        
+    Returns:
+        str: Contenido HTML de la página
+    """
+    if url is None:
+        url = URL_CLIMA
+    
+    logger.info(f"Obteniendo datos de {url}")
+    
+    response = requests.get(
+        url,
+        headers=REQUEST_HEADERS,
+        timeout=REQUEST_TIMEOUT
+    )
+    response.raise_for_status()
+    response.encoding = 'utf-8'
+    
+    return response.text
+
+
+def extraer_pronostico_general(html):
+    """
+    Extrae el pronóstico general de la provincia desde el HTML.
+    
+    Args:
+        html: Contenido HTML de la página
+        
+    Returns:
+        dict: Diccionario con el pronóstico estructurado
+    """
+    soup = BeautifulSoup(html, 'lxml')
+    
+    pronostico = {
+        'estado_actual': None,
+        'pronostico_hoy': None,
+        'pronostico_extendido': [],
+        'informe_especial': None,
+        'alerta_meteorologica': None
+    }
+    
+    # Buscar el contenedor del pronóstico
+    contenedor = soup.find('span', id='ContentPlaceHolder1_spanPronosticoGeneralTexto')
+    
+    if not contenedor:
+        logger.warning("No se encontró el contenedor del pronóstico general")
+        return pronostico
+    
+    # Extraer todas las secciones
+    titulos = contenedor.find_all('p', class_='PronosticoGeneralTitulo')
+    detalles = contenedor.find_all('p', class_='PronosticoGeneralDetalle')
+    
+    for i, titulo in enumerate(titulos):
+        titulo_texto = limpiar_texto(titulo.get_text())
+        
+        if i < len(detalles):
+            detalle_texto = detalles[i].get_text(separator='\n').strip()
+            
+            if 'Estado del Tiempo Actual' in titulo_texto:
+                pronostico['estado_actual'] = procesar_estado_actual(detalle_texto)
+            
+            elif 'Pronóstico para Hoy' in titulo_texto or 'Prónostico para Hoy' in titulo_texto:
+                pronostico['pronostico_hoy'] = procesar_pronostico_hoy(detalle_texto)
+    
+    # Extraer informe especial y alerta si existen
+    texto_completo = contenedor.get_text()
+    
+    if 'INFORME ESPECIAL' in texto_completo:
+        pronostico['informe_especial'] = extraer_seccion(texto_completo, 'INFORME ESPECIAL', 'ALERTA')
+    
+    if 'ALERTA METEOROLÓGICA' in texto_completo or 'ALERTA METEOROLOGICA' in texto_completo:
+        pronostico['alerta_meteorologica'] = extraer_alerta(texto_completo)
+    
+    # Extraer pronóstico extendido
+    pronostico['pronostico_extendido'] = extraer_pronostico_extendido(texto_completo)
+    
+    return pronostico
+
+
+def procesar_estado_actual(texto):
+    """
+    Procesa el texto del estado actual del tiempo.
+    
+    Args:
+        texto: Texto del estado actual
+        
+    Returns:
+        dict: Estado actual estructurado
+    """
+    estado = {
+        'descripcion': '',
+        'cielo': '',
+        'temperatura': '',
+        'viento': ''
+    }
+    
+    lineas = texto.split('\n')
+    descripciones = []
+    
+    for linea in lineas:
+        linea = linea.strip()
+        if not linea or linea.startswith('INFORME'):
+            break
+        
+        linea_lower = linea.lower()
+        
+        if 'cielo' in linea_lower:
+            estado['cielo'] = linea
+        elif 'temperatura' in linea_lower:
+            estado['temperatura'] = linea
+        elif 'viento' in linea_lower:
+            estado['viento'] = linea
+        else:
+            descripciones.append(linea)
+    
+    estado['descripcion'] = ' '.join(descripciones)
+    
+    return estado
+
+
+def procesar_pronostico_hoy(texto):
+    """
+    Procesa el texto del pronóstico para hoy.
+    
+    Args:
+        texto: Texto del pronóstico de hoy
+        
+    Returns:
+        dict: Pronóstico de hoy estructurado
+    """
+    pronostico = {
+        'descripcion': '',
+        'temperatura_minima': None,
+        'temperatura_maxima': None,
+        'viento': '',
+        'cielo': ''
+    }
+    
+    # Extraer temperaturas
+    temp_pattern = r'(\d+)[°ºC]+'
+    temps = re.findall(temp_pattern, texto)
+    
+    if len(temps) >= 2:
+        pronostico['temperatura_minima'] = int(temps[0])
+        pronostico['temperatura_maxima'] = int(temps[1])
+    elif len(temps) == 1:
+        pronostico['temperatura_maxima'] = int(temps[0])
+    
+    # Procesar líneas
+    lineas = texto.split('\n')
+    descripciones = []
+    
+    for linea in lineas:
+        linea = linea.strip()
+        if not linea or linea.startswith('Pronóstico Extendido'):
+            break
+        
+        linea_lower = linea.lower()
+        
+        if 'viento' in linea_lower:
+            pronostico['viento'] = linea
+        elif 'cielo' in linea_lower:
+            pronostico['cielo'] = linea
+        else:
+            descripciones.append(linea)
+    
+    pronostico['descripcion'] = ' '.join(descripciones)
+    
+    return pronostico
+
+
+def extraer_seccion(texto, inicio, fin=None):
+    """
+    Extrae una sección de texto entre dos marcadores.
+    
+    Args:
+        texto: Texto completo
+        inicio: Marcador de inicio
+        fin: Marcador de fin (opcional)
+        
+    Returns:
+        str: Sección extraída
+    """
+    try:
+        start_idx = texto.find(inicio)
+        if start_idx == -1:
+            return None
+        
+        if fin:
+            end_idx = texto.find(fin, start_idx + len(inicio))
+            if end_idx == -1:
+                return limpiar_texto(texto[start_idx:])
+            return limpiar_texto(texto[start_idx:end_idx])
+        
+        return limpiar_texto(texto[start_idx:])
+    except Exception:
+        return None
+
+
+def extraer_alerta(texto):
+    """
+    Extrae información de alerta meteorológica.
+    
+    Args:
+        texto: Texto completo del pronóstico
+        
+    Returns:
+        dict: Información de la alerta
+    """
+    alerta = {
+        'zona_afectada': None,
+        'horario': None,
+        'descripcion': None
+    }
+    
+    # Buscar zona afectada
+    zona_match = re.search(r'Zona afectada:\s*(.+?)(?:\.|Horario|$)', texto, re.IGNORECASE)
+    if zona_match:
+        alerta['zona_afectada'] = limpiar_texto(zona_match.group(1))
+    
+    # Buscar horario de emisión
+    horario_match = re.search(r'Horario de emisión:\s*(.+?)(?:\.|Se prevé|$)', texto, re.IGNORECASE)
+    if horario_match:
+        alerta['horario'] = limpiar_texto(horario_match.group(1))
+    
+    # Buscar descripción de la alerta
+    desc_match = re.search(r'Se prevé\s+(.+?)(?:Pronóstico|$)', texto, re.IGNORECASE | re.DOTALL)
+    if desc_match:
+        alerta['descripcion'] = limpiar_texto(desc_match.group(1))
+    
+    return alerta
+
+
+def extraer_pronostico_extendido(texto):
+    """
+    Extrae el pronóstico extendido (días siguientes).
+    
+    Args:
+        texto: Texto completo del pronóstico
+        
+    Returns:
+        list: Lista de pronósticos por día
+    """
+    pronosticos = []
+    
+    # Buscar la sección de pronóstico extendido
+    extendido_idx = texto.find('Pronóstico Extendido')
+    if extendido_idx == -1:
+        return pronosticos
+    
+    texto_extendido = texto[extendido_idx:]
+    
+    # Patrón para encontrar días
+    dias_pattern = r'(Domingo|Lunes|Martes|Miércoles|Jueves|Viernes|Sábado)\s+(\d{1,2})\s+de\s+(\w+)\s+de\s+(\d{4})'
+    
+    matches = list(re.finditer(dias_pattern, texto_extendido, re.IGNORECASE))
+    
+    for i, match in enumerate(matches):
+        dia_info = {
+            'dia': match.group(1),
+            'fecha': f"{match.group(2)} de {match.group(3)} de {match.group(4)}",
+            'descripcion': '',
+            'temperatura_minima': None,
+            'temperatura_maxima': None
+        }
+        
+        # Extraer el texto hasta el siguiente día o fin
+        start = match.end()
+        if i + 1 < len(matches):
+            end = matches[i + 1].start()
+        else:
+            end = len(texto_extendido)
+        
+        descripcion = texto_extendido[start:end].strip()
+        dia_info['descripcion'] = limpiar_texto(descripcion)
+        
+        # Extraer temperaturas
+        temps = re.findall(r'(\d+)[°ºC]+', descripcion)
+        if len(temps) >= 2:
+            dia_info['temperatura_minima'] = int(temps[0])
+            dia_info['temperatura_maxima'] = int(temps[1])
+        
+        pronosticos.append(dia_info)
+    
+    return pronosticos
+
+
+def extraer_estaciones_desde_js(html):
+    """
+    Extrae los datos de las estaciones meteorológicas desde el JavaScript.
+    
+    Args:
+        html: Contenido HTML de la página
+        
+    Returns:
+        list: Lista de estaciones con sus datos
+    """
+    estaciones = []
+    
+    # Buscar el array vEstaciones en el JavaScript
+    pattern = r'var vEstaciones\s*=\s*\[(.*?)\];'
+    match = re.search(pattern, html, re.DOTALL)
+    
+    if not match:
+        logger.warning("No se encontraron datos de estaciones")
+        return estaciones
+    
+    # Procesar cada estación
+    estacion_pattern = r'\[(\d+),"([^"]+)",(-?\d+\.?\d*),(-?\d+\.?\d*),new Date\((\d+)\),([^,]*),([^,]*)'
+    
+    for est_match in re.finditer(estacion_pattern, match.group(1)):
+        try:
+            temp = est_match.group(6)
+            temperatura = float(temp) if temp and temp != 'null' else None
+            
+            estacion = {
+                'id': int(est_match.group(1)),
+                'nombre': est_match.group(2),
+                'latitud': float(est_match.group(3)),
+                'longitud': float(est_match.group(4)),
+                'timestamp': int(est_match.group(5)),
+                'temperatura': temperatura,
+                'precipitacion': float(est_match.group(7)) if est_match.group(7) != 'null' else 0.0
+            }
+            estaciones.append(estacion)
+        except (ValueError, IndexError) as e:
+            logger.debug(f"Error procesando estación: {e}")
+            continue
+    
+    return estaciones
+
+
+def obtener_clima():
+    """
+    Función principal que obtiene toda la información del clima.
+    
+    Returns:
+        dict: Diccionario con toda la información meteorológica
+    """
+    try:
+        html = obtener_html()
+        
+        clima = {
+            'pronostico_general': extraer_pronostico_general(html),
+            'estaciones': extraer_estaciones_desde_js(html),
+            'exito': True,
+            'error': None
+        }
+        
+        logger.info("Datos del clima obtenidos correctamente")
+        return clima
+        
+    except requests.RequestException as e:
+        logger.error(f"Error de conexión: {e}")
+        return {
+            'pronostico_general': None,
+            'estaciones': [],
+            'exito': False,
+            'error': str(e)
+        }
+    except Exception as e:
+        logger.error(f"Error inesperado: {e}")
+        return {
+            'pronostico_general': None,
+            'estaciones': [],
+            'exito': False,
+            'error': str(e)
+        }
+
+
+def buscar_estacion(nombre, estaciones):
+    """
+    Busca una estación por nombre.
+    
+    Args:
+        nombre: Nombre de la estación a buscar
+        estaciones: Lista de estaciones
+        
+    Returns:
+        dict: Datos de la estación encontrada o None
+    """
+    nombre_lower = nombre.lower()
+    
+    for estacion in estaciones:
+        if nombre_lower in estacion['nombre'].lower():
+            return estacion
+    
+    return None
+
+
+# Para pruebas directas
+if __name__ == "__main__":
+    clima = obtener_clima()
+    
+    if clima['exito']:
+        print("\n=== PRONÓSTICO GENERAL ===")
+        pronostico = clima['pronostico_general']
+        
+        if pronostico['estado_actual']:
+            print("\n--- Estado Actual ---")
+            print(pronostico['estado_actual']['descripcion'])
+        
+        if pronostico['alerta_meteorologica']:
+            print("\n--- ⚠️ ALERTA METEOROLÓGICA ---")
+            alerta = pronostico['alerta_meteorologica']
+            if alerta['zona_afectada']:
+                print(f"Zona: {alerta['zona_afectada']}")
+            if alerta['descripcion']:
+                print(f"Descripción: {alerta['descripcion']}")
+        
+        if pronostico['pronostico_hoy']:
+            print("\n--- Pronóstico para Hoy ---")
+            hoy = pronostico['pronostico_hoy']
+            print(f"Temp. Mín: {hoy['temperatura_minima']}°C")
+            print(f"Temp. Máx: {hoy['temperatura_maxima']}°C")
+            print(f"Viento: {hoy['viento']}")
+        
+        print(f"\n--- Estaciones ({len(clima['estaciones'])} encontradas) ---")
+        
+        # Mostrar algunas estaciones de ejemplo
+        for estacion in clima['estaciones'][:5]:
+            if estacion['temperatura'] is not None:
+                print(f"  {estacion['nombre']}: {estacion['temperatura']}°C")
+    else:
+        print(f"Error: {clima['error']}")
+

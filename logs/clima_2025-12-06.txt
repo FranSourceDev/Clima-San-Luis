@@ -1,0 +1,49 @@
+============================================================
+CLIMA SAN LUIS - Sábado 6 de Diciembre de 2025
+Generado: 19:55:57
+============================================================
+
+--- ESTADO ACTUAL ---
+Cielo: El cielo está mayormente nublado con precipitaciones aisladas en el centro y norte provincial.
+Viento: El viento es leve del cuadrante este.
+
+--- ALERTA METEOROLÓGICA ---
+Zona: Regiones centro y norte provincial
+Vigencia: 10:00 horas, vigente hasta las 10 horas del domingo 7 de diciembre de 2025
+Descripción: un descenso gradual de las temperaturas hasta el amanecer del lunes. ALERTA METEOROLÓGICA Zona afectada: Regiones centro y norte provincial. Horario de emisión: 10:00 horas, vigente hasta las 10 horas del domingo 7 de diciembre de 2025. Se prevé que continúe la ocurrencia de lluvias y tormentas aisladas de diversa intensidad. Estos fenómenos pueden afectar a los departamentos Ayacucho, San Martín, Belgrano, Junín, Pringles, Chacabuco y al sector norte de Pueyrredón y Pedernera. Es probable que se registren precipitaciones intensas con acumulados significativos, caída ocasional de granizo, importante actividad eléctrica y fuertes ráfagas de viento.Prónostico para HoyEl sábado será una jornada ventosa, inestable y con leve descenso de las temperaturas máximas y algo ventoso. El cielo estará parcialmente nublado con lluvias y tormentas aisladas (algunas localmente fuertes) durante toda la jornada con mejoramientos temporarios principalmente en el centro y norte provincial. Las temperaturas irán desde 19°C de mínimas, pudiendo registrarse por la noche, y las máximas serán de 28°C. El viento será del sector este tendrá magnitud de leve a moderado (12 a 28 km/h)con rachas de 60 km/h (en el noroeste y zona serrana).
+
+--- PRONÓSTICO PARA HOY ---
+Temperatura Mínima: 19°C
+Temperatura Máxima: 28°C
+Cielo: El cielo estará parcialmente nublado con lluvias y tormentas aisladas (algunas localmente fuertes) durante toda la jornada con mejoramientos temporarios principalmente en el centro y norte provincial.
+Viento: El viento será del sector este tendrá magnitud de leve a moderado (12 a 28 km/h)con rachas de 60 km/h (en el noroeste y zona serrana).
+
+--- PRONÓSTICO EXTENDIDO ---
+
+Domingo 7 de diciembre de 2025
+  Min: 16°C / Max: 22°C
+  Jornada donde continúa el descenso de las temperaturas. El cielo comenzará mayormente nublado a parcialmente nublado con lluvias y tormentas aisladas a lo largo del día. En promedio, se esperan mínima...
+
+Lunes 8 de diciembre de 2025
+  Min: 15°C / Max: 27°C
+  Jornada con poco cambio de las temperaturas y algo inestable. El cielo estará parcialmente nublado. En promedio, se esperan mínimas de 15°C y máximas de 27°C. El viento será variable del sector suroes...
+
+Martes 9 de diciembre de 2025
+  Min: 15°C / Max: 29°C
+  Jornada con ascenso de las temperaturas. El cielo estará mayormente despejado En promedio, se esperan mínimas de 15°C y máximas de 29°C. El viento iniciará del sector este con algunas ráfagas.
+
+--- ESTACIONES ---
+  Aeropuerto San Luis: 22.2°C
+  Aeropuerto Valle del Conlara: 19.6°C
+  AgroZAL: 18.6°C
+  Alto Pelado: 18.2°C
+  Anchorena: 27.2°C
+  Bajada Nueva: 24.4°C
+  Baldecito: 22.8°C
+  Batavia: 23.0°C
+  Beazley: 22.7°C
+  Buena Esperanza: 24.4°C
+
+============================================================
+Fuente: clima.sanluis.gob.ar - REM
+============================================================
