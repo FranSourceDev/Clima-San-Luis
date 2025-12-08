@@ -1,7 +1,9 @@
-export default function StationCard({ title, value, unit, icon, subtitle, highlight }) {
+export default function StationCard({ title, value, unit, icon, iconClass, subtitle, highlight }) {
   return (
     <div className={`station-card ${highlight ? 'highlight' : ''}`}>
-      <div className="card-icon">{icon}</div>
+      <div className={`card-icon ${iconClass || ''}`}>
+        {icon}
+      </div>
       <div className="card-content">
         <h3 className="card-title">{title}</h3>
         <div className="card-value">

@@ -176,3 +176,5 @@ def get_resumen():
         'hay_alerta': pronostico.get('alerta_meteorologica') is not None
     })
 
+
+

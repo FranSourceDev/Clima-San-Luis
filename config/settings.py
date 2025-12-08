@@ -26,3 +26,5 @@ REQUEST_HEADERS = {
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 LOG_FILE = "logs/clima.log"
 
+
+

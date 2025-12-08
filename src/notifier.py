@@ -342,3 +342,5 @@ if __name__ == "__main__":
     print("\nResumen generado:")
     print(generar_resumen(clima_prueba))
 
+
+
