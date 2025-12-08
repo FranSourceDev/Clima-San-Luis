@@ -3,6 +3,7 @@ import axios from 'axios';
 import TemperatureChart from './TemperatureChart';
 import TemperatureMap from './TemperatureMap';
 import StationCard from './StationCard';
+import ThemeToggle from './ThemeToggle';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -196,12 +197,17 @@ export default function Dashboard() {
           <p className="header-subtitle">Red de Estaciones Meteorológicas</p>
         </div>
         <div className="header-right">
-          <p className="header-date">{formatDate()}</p>
-          {lastUpdate && (
-            <p className="header-update">
-              Actualizado: {formatTime(lastUpdate)}
-            </p>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div>
+              <p className="header-date">{formatDate()}</p>
+              {lastUpdate && (
+                <p className="header-update">
+                  Actualizado: {formatTime(lastUpdate)}
+                </p>
+              )}
+            </div>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 

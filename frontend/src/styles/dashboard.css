@@ -73,6 +73,54 @@
 }
 
 /* ============================================
+   CSS VARIABLES - DARK THEME
+   ============================================ */
+.dark {
+  /* Colores principales - Tema Oscuro */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+  --bg-card: #141414;
+  
+  /* Bordes */
+  --border-color: #2a2a2a;
+  --border-highlight: #0070f3;
+  
+  /* Texto */
+  --text-primary: #ededed;
+  --text-secondary: #a0a0a0;
+  --text-muted: #707070;
+  
+  /* Acentos - Vercel (ajustados para oscuro) */
+  --accent-blue: #0070f3;
+  --accent-green: #0cce6b;
+  --accent-orange: #f5a623;
+  --accent-red: #ff3333;
+  --accent-purple: #7928ca;
+  --accent-cyan: #00b4d8;
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, #0070f3 0%, #00b4d8 100%);
+  --gradient-warm: linear-gradient(135deg, #f5a623 0%, #ff3333 100%);
+  --gradient-cool: linear-gradient(135deg, #7928ca 0%, #0070f3 100%);
+  
+  /* Temperaturas (mismos colores pero más brillantes) */
+  --temp-cold: #a855f7;
+  --temp-cool: #3b82f6;
+  --temp-mild: #06b6d4;
+  --temp-warm: #10b981;
+  --temp-hot: #f59e0b;
+  --temp-very-hot: #fb923c;
+  --temp-extreme: #ef4444;
+  
+  /* Sombras - ajustadas para tema oscuro */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.6);
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.8);
+}
+
+/* ============================================
    RESET & BASE
    ============================================ */
 *, *::before, *::after {
@@ -93,6 +141,7 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ============================================
@@ -191,7 +240,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-lg) var(--spacing-xl);
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--bg-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
@@ -200,6 +249,7 @@ body {
   animation: fadeInUp 0.5s ease forwards;
   position: relative;
   overflow: hidden;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .dashboard-header::before {
@@ -270,6 +320,58 @@ body {
 }
 
 /* ============================================
+   THEME TOGGLE
+   ============================================ */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+  padding: 0;
+  margin-left: var(--spacing-md);
+}
+
+.theme-toggle:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-highlight);
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+.theme-toggle-sun {
+  color: #f59e0b;
+}
+
+.theme-toggle-moon {
+  color: #a0a0a0;
+}
+
+/* ============================================
    ALERT BANNER - Modern Style
    ============================================ */
 .alert-banner {
@@ -336,7 +438,7 @@ body {
   padding: var(--spacing-lg);
   display: flex;
   gap: var(--spacing-md);
-  transition: all 0.2s ease;
+  transition: all 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
   animation: fadeInUp 0.5s ease forwards;
   opacity: 0;
   cursor: default;
@@ -868,12 +970,12 @@ body {
 .leaflet-map {
   height: 500px;
   width: 100%;
-  background: #000000;
+  background: var(--bg-secondary);
 }
 
-/* Leaflet dark theme overrides */
+/* Leaflet theme overrides */
 .leaflet-container {
-  background: #000000 !important;
+  background: var(--bg-secondary) !important;
   font-family: var(--font-sans);
 }
 

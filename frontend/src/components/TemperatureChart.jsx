@@ -1,3 +1,4 @@
+import { useTheme } from '../contexts/ThemeContext';
 import {
   BarChart,
   Bar,
@@ -9,15 +10,22 @@ import {
   Cell
 } from 'recharts';
 
-// Vercel-style temperature colors
-const getTemperatureColor = (temp) => {
-  if (temp >= 35) return '#ee0000';      // Rojo - muy caliente
-  if (temp >= 30) return '#ff6b35';      // Naranja - caliente
-  if (temp >= 25) return '#f5a623';      // Amarillo - cálido
-  if (temp >= 20) return '#0cce6b';      // Verde - templado
-  if (temp >= 15) return '#00b4d8';      // Cyan - fresco
-  if (temp >= 10) return '#0070f3';      // Azul - frío
-  return '#7928ca';                       // Violeta - muy frío
+// Helper para obtener valores de variables CSS
+const getCSSVariable = (variableName) => {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(variableName)
+    .trim();
+};
+
+// Vercel-style temperature colors - usa variables CSS cuando sea posible
+const getTemperatureColor = (temp, theme) => {
+  if (temp >= 35) return theme === 'dark' ? '#ef4444' : '#ee0000';
+  if (temp >= 30) return theme === 'dark' ? '#fb923c' : '#ff6b35';
+  if (temp >= 25) return theme === 'dark' ? '#f59e0b' : '#f5a623';
+  if (temp >= 20) return '#0cce6b';
+  if (temp >= 15) return '#00b4d8';
+  if (temp >= 10) return '#0070f3';
+  return theme === 'dark' ? '#a855f7' : '#7928ca';
 };
 
 // Thermometer Icon SVG
@@ -27,13 +35,13 @@ const ThermometerIcon = () => (
   </svg>
 );
 
-const CustomTooltip = ({ active, payload }) => {
+const CustomTooltip = ({ active, payload, theme }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
       <div className="custom-tooltip">
         <p className="tooltip-name">{data.nombre}</p>
-        <p className="tooltip-temp" style={{ color: getTemperatureColor(data.temperatura) }}>
+        <p className="tooltip-temp" style={{ color: getTemperatureColor(data.temperatura, theme) }}>
           {data.temperatura}°C
         </p>
         {data.precipitacion > 0 && (
@@ -46,6 +54,15 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 export default function TemperatureChart({ estaciones, maxItems = 20 }) {
+  const { theme } = useTheme();
+  
+  // Obtener valores de variables CSS según el tema
+  const borderColor = getCSSVariable('--border-color');
+  const textPrimary = getCSSVariable('--text-primary');
+  const textSecondary = getCSSVariable('--text-secondary');
+  const textMuted = getCSSVariable('--text-muted');
+  const accentBlue = getCSSVariable('--accent-blue');
+  
   // Tomar las primeras N estaciones (ya vienen ordenadas por temperatura)
   const data = estaciones.slice(0, maxItems).map(est => ({
     ...est,
@@ -71,29 +88,29 @@ export default function TemperatureChart({ estaciones, maxItems = 20 }) {
         >
           <CartesianGrid 
             strokeDasharray="3 3" 
-            stroke="#eaeaea"
+            stroke={borderColor}
             horizontal={true}
             vertical={false}
           />
           <XAxis 
             type="number" 
             domain={[0, 'auto']}
-            stroke="#999999"
-            tick={{ fill: '#666666', fontSize: 12 }}
-            axisLine={{ stroke: '#eaeaea' }}
+            stroke={textMuted}
+            tick={{ fill: textSecondary, fontSize: 12 }}
+            axisLine={{ stroke: borderColor }}
             tickFormatter={(value) => `${value}°`}
           />
           <YAxis 
             type="category" 
             dataKey="nombreCorto"
-            stroke="#999999"
-            tick={{ fill: '#171717', fontSize: 11, fontWeight: 500 }}
-            axisLine={{ stroke: '#eaeaea' }}
+            stroke={textMuted}
+            tick={{ fill: textPrimary, fontSize: 11, fontWeight: 500 }}
+            axisLine={{ stroke: borderColor }}
             width={95}
           />
           <Tooltip 
-            content={<CustomTooltip />}
-            cursor={{ fill: 'rgba(0, 112, 243, 0.05)' }}
+            content={<CustomTooltip theme={theme} />}
+            cursor={{ fill: theme === 'dark' ? 'rgba(0, 112, 243, 0.1)' : 'rgba(0, 112, 243, 0.05)' }}
           />
           <Bar 
             dataKey="temperatura" 
@@ -103,7 +120,7 @@ export default function TemperatureChart({ estaciones, maxItems = 20 }) {
             {data.map((entry, index) => (
               <Cell 
                 key={`cell-${index}`} 
-                fill={getTemperatureColor(entry.temperatura)}
+                fill={getTemperatureColor(entry.temperatura, theme)}
               />
             ))}
           </Bar>
@@ -111,31 +128,31 @@ export default function TemperatureChart({ estaciones, maxItems = 20 }) {
       </ResponsiveContainer>
       <div className="chart-legend">
         <span className="legend-item">
-          <span className="legend-color" style={{ background: '#7928ca' }}></span>
+          <span className="legend-color" style={{ background: getTemperatureColor(5, theme) }}></span>
           &lt;10°
         </span>
         <span className="legend-item">
-          <span className="legend-color" style={{ background: '#0070f3' }}></span>
+          <span className="legend-color" style={{ background: getTemperatureColor(12, theme) }}></span>
           10-15°
         </span>
         <span className="legend-item">
-          <span className="legend-color" style={{ background: '#00b4d8' }}></span>
+          <span className="legend-color" style={{ background: getTemperatureColor(17, theme) }}></span>
           15-20°
         </span>
         <span className="legend-item">
-          <span className="legend-color" style={{ background: '#0cce6b' }}></span>
+          <span className="legend-color" style={{ background: getTemperatureColor(22, theme) }}></span>
           20-25°
         </span>
         <span className="legend-item">
-          <span className="legend-color" style={{ background: '#f5a623' }}></span>
+          <span className="legend-color" style={{ background: getTemperatureColor(27, theme) }}></span>
           25-30°
         </span>
         <span className="legend-item">
-          <span className="legend-color" style={{ background: '#ff6b35' }}></span>
+          <span className="legend-color" style={{ background: getTemperatureColor(32, theme) }}></span>
           30-35°
         </span>
         <span className="legend-item">
-          <span className="legend-color" style={{ background: '#ee0000' }}></span>
+          <span className="legend-color" style={{ background: getTemperatureColor(37, theme) }}></span>
           &gt;35°
         </span>
       </div>

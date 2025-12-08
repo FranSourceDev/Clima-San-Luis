@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
+import { useTheme } from '../contexts/ThemeContext';
 import 'leaflet/dist/leaflet.css';
 
 // Map Icon SVG
@@ -12,17 +13,18 @@ const MapIcon = () => (
 );
 
 // Vercel-style temperature colors para el borde del marcador
-const getTemperatureColor = (temp) => {
-  if (temp >= 35) return '#ee0000';
-  if (temp >= 30) return '#ff6b35';
-  if (temp >= 25) return '#f5a623';
+const getTemperatureColor = (temp, theme) => {
+  if (temp >= 35) return theme === 'dark' ? '#ef4444' : '#ee0000';
+  if (temp >= 30) return theme === 'dark' ? '#fb923c' : '#ff6b35';
+  if (temp >= 25) return theme === 'dark' ? '#f59e0b' : '#f5a623';
   if (temp >= 20) return '#0cce6b';
   if (temp >= 15) return '#00b4d8';
   if (temp >= 10) return '#0070f3';
-  return '#7928ca';
+  return theme === 'dark' ? '#a855f7' : '#7928ca';
 };
 
 export default function TemperatureMap({ estaciones }) {
+  const { theme } = useTheme();
   // Centro de San Luis provincia
   const center = [-33.3, -66.3];
   const [hoveredStation, setHoveredStation] = useState(null);
@@ -31,6 +33,11 @@ export default function TemperatureMap({ estaciones }) {
   const estacionesValidas = estaciones.filter(
     est => est.latitud && est.longitud && est.temperatura !== null
   );
+  
+  // Seleccionar tiles según el tema
+  const tileUrl = theme === 'dark' 
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
   return (
     <div className="map-container">
@@ -47,10 +54,11 @@ export default function TemperatureMap({ estaciones }) {
           scrollWheelZoom={true}
           className="leaflet-map"
         >
-          {/* Mapa base con estilo oscuro */}
+          {/* Mapa base - cambia según el tema */}
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            url={tileUrl}
+            key={theme} // Forzar re-render cuando cambie el tema
           />
           
           {/* Marcadores de estaciones con nombre y temperatura */}
@@ -63,9 +71,9 @@ export default function TemperatureMap({ estaciones }) {
                 center={[estacion.latitud, estacion.longitud]}
                 radius={6}
                 pathOptions={{
-                  fillColor: '#ffffff',
+                  fillColor: theme === 'dark' ? '#1a1a1a' : '#ffffff',
                   fillOpacity: 0.95,
-                  color: getTemperatureColor(estacion.temperatura),
+                  color: getTemperatureColor(estacion.temperatura, theme),
                   weight: 3,
                   opacity: 1
                 }}
@@ -87,7 +95,7 @@ export default function TemperatureMap({ estaciones }) {
                 >
                   <div className="tooltip-hover-content">
                     <strong className="tooltip-name-hover">{estacion.nombre}</strong>
-                    <span className="tooltip-temp-hover" style={{ color: getTemperatureColor(estacion.temperatura) }}>
+                    <span className="tooltip-temp-hover" style={{ color: getTemperatureColor(estacion.temperatura, theme) }}>
                       {estacion.temperatura}°C
                     </span>
                   </div>
