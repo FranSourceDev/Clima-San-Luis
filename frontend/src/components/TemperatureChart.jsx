@@ -1,4 +1,5 @@
 import { useTheme } from '../contexts/ThemeContext';
+import { useMemo, useState, useEffect } from 'react';
 import {
   BarChart,
   Bar,
@@ -55,22 +56,59 @@ const CustomTooltip = ({ active, payload, theme }) => {
 
 export default function TemperatureChart({ estaciones, maxItems = 20 }) {
   const { theme } = useTheme();
-  
-  // Obtener valores de variables CSS según el tema
-  const borderColor = getCSSVariable('--border-color');
-  const textPrimary = getCSSVariable('--text-primary');
-  const textSecondary = getCSSVariable('--text-secondary');
-  const textMuted = getCSSVariable('--text-muted');
-  const accentBlue = getCSSVariable('--accent-blue');
-  
-  // Tomar las primeras N estaciones (ya vienen ordenadas por temperatura)
-  const data = estaciones.slice(0, maxItems).map(est => ({
-    ...est,
-    // Acortar nombres largos
-    nombreCorto: est.nombre.length > 18 
-      ? est.nombre.substring(0, 16) + '...' 
-      : est.nombre
+  const [chartColors, setChartColors] = useState(() => ({
+    borderColor: getCSSVariable('--border-color') || '#eaeaea',
+    textPrimary: getCSSVariable('--text-primary') || '#171717',
+    textSecondary: getCSSVariable('--text-secondary') || '#666666',
+    textMuted: getCSSVariable('--text-muted') || '#999999',
+    accentBlue: getCSSVariable('--accent-blue') || '#0070f3'
   }));
+  
+  // Actualizar colores cuando cambie el tema - usar requestAnimationFrame para asegurar que las CSS se actualizaron
+  useEffect(() => {
+    const updateColors = () => {
+      requestAnimationFrame(() => {
+        setChartColors({
+          borderColor: getCSSVariable('--border-color') || (theme === 'dark' ? '#2a2a2a' : '#eaeaea'),
+          textPrimary: getCSSVariable('--text-primary') || (theme === 'dark' ? '#ededed' : '#171717'),
+          textSecondary: getCSSVariable('--text-secondary') || (theme === 'dark' ? '#a0a0a0' : '#666666'),
+          textMuted: getCSSVariable('--text-muted') || (theme === 'dark' ? '#707070' : '#999999'),
+          accentBlue: getCSSVariable('--accent-blue') || '#0070f3'
+        });
+      });
+    };
+    
+    updateColors();
+  }, [theme]); // Recalcular cuando cambie el tema
+  
+  // Función para limpiar y formatear nombres de estaciones
+  const limpiarNombre = (nombre) => {
+    // Eliminar prefijos comunes innecesarios
+    let nombreLimpio = nombre
+      .replace(/^Estación\s+/i, '')
+      .replace(/^Est\.\s+/i, '')
+      .replace(/^EST\.\s+/i, '')
+      .trim();
+    
+    // Capitalizar correctamente (primera letra de cada palabra)
+    nombreLimpio = nombreLimpio
+      .split(' ')
+      .map(palabra => {
+        if (palabra.length === 0) return palabra;
+        return palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase();
+      })
+      .join(' ');
+    
+    return nombreLimpio || nombre; // Si queda vacío, usar el original
+  };
+
+  // Tomar las primeras N estaciones (ya vienen ordenadas por temperatura)
+  const data = useMemo(() => {
+    return estaciones.slice(0, maxItems).map(est => ({
+      ...est,
+      nombre: limpiarNombre(est.nombre)
+    }));
+  }, [estaciones, maxItems]);
 
   return (
     <div className="chart-container">
@@ -82,31 +120,33 @@ export default function TemperatureChart({ estaciones, maxItems = 20 }) {
       </h2>
       <ResponsiveContainer width="100%" height={500}>
         <BarChart
+          key={`chart-${theme}`}
           data={data}
           layout="vertical"
-          margin={{ top: 10, right: 30, left: 100, bottom: 10 }}
+          margin={{ top: 10, right: 30, left: 140, bottom: 10 }}
         >
           <CartesianGrid 
             strokeDasharray="3 3" 
-            stroke={borderColor}
+            stroke={chartColors.borderColor}
             horizontal={true}
             vertical={false}
           />
           <XAxis 
             type="number" 
             domain={[0, 'auto']}
-            stroke={textMuted}
-            tick={{ fill: textSecondary, fontSize: 12 }}
-            axisLine={{ stroke: borderColor }}
+            stroke={chartColors.textMuted}
+            tick={{ fill: chartColors.textSecondary, fontSize: 12 }}
+            axisLine={{ stroke: chartColors.borderColor }}
             tickFormatter={(value) => `${value}°`}
           />
           <YAxis 
             type="category" 
-            dataKey="nombreCorto"
-            stroke={textMuted}
-            tick={{ fill: textPrimary, fontSize: 11, fontWeight: 500 }}
-            axisLine={{ stroke: borderColor }}
-            width={95}
+            dataKey="nombre"
+            stroke={chartColors.textMuted}
+            tick={{ fill: chartColors.textPrimary, fontSize: 11, fontWeight: 500 }}
+            axisLine={{ stroke: chartColors.borderColor }}
+            width={130}
+            tickFormatter={(value) => value && value.length > 25 ? value.substring(0, 22) + '...' : value}
           />
           <Tooltip 
             content={<CustomTooltip theme={theme} />}
