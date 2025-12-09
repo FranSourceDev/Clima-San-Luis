@@ -595,6 +595,20 @@ body {
 }
 
 /* ============================================
+   PRONÓSTICO PARA HOY - DESCRIPCIÓN
+   ============================================ */
+.pronostico-hoy-descripcion {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-blue);
+}
+
+/* ============================================
    CHART CONTAINER
    ============================================ */
 .chart-container {

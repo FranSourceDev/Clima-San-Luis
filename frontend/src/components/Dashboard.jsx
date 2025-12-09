@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import TemperatureChart from './TemperatureChart';
 import TemperatureMap from './TemperatureMap';
@@ -140,6 +140,45 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
+  // Función helper para buscar estación por nombre
+  const buscarEstacionPorNombre = (nombreBuscar, listaEstaciones) => {
+    if (!listaEstaciones || listaEstaciones.length === 0) return null;
+    
+    const nombreLower = nombreBuscar.toLowerCase().trim();
+    
+    // Primero buscar coincidencias exactas o más específicas
+    // Priorizar "Ciudad de San Luis" sobre "San Luis Rural" u otras variaciones
+    const coincidenciasExactas = listaEstaciones.filter(est => {
+      const nombreEst = est.nombre.toLowerCase();
+      return nombreEst === nombreLower || 
+             nombreEst === `ciudad de ${nombreLower}` ||
+             nombreEst.includes(`ciudad de ${nombreLower}`);
+    });
+    
+    if (coincidenciasExactas.length > 0) {
+      // Priorizar la que tenga "Ciudad de" en el nombre
+      const ciudadDe = coincidenciasExactas.find(est => 
+        est.nombre.toLowerCase().includes('ciudad de')
+      );
+      return ciudadDe || coincidenciasExactas[0];
+    }
+    
+    // Si no hay coincidencia exacta, buscar parcial
+    for (const estacion of listaEstaciones) {
+      const nombreEst = estacion.nombre.toLowerCase();
+      if (nombreEst.includes(nombreLower) || nombreLower.includes(nombreEst.split(' ')[0])) {
+        return estacion;
+      }
+    }
+    
+    return null;
+  };
+
+  // Obtener estación de Aeropuerto San Luis
+  const estacionAeropuertoSanLuis = useMemo(() => {
+    return buscarEstacionPorNombre('aeropuerto san luis', estaciones);
+  }, [estaciones]);
+
   const formatDate = () => {
     const now = new Date();
     const options = { 
@@ -246,12 +285,12 @@ export default function Dashboard() {
           highlight={resumen?.temperatura_maxima >= 30}
         />
         <StationCard
-          title="Promedio Actual"
-          value={resumen?.temperatura_promedio ?? '--'}
+          title="Temperatura Actual"
+          value={estacionAeropuertoSanLuis?.temperatura ?? '--'}
           unit="°C"
           icon={<ThermometerIcon />}
           iconClass="temp-avg"
-          subtitle={`${resumen?.total_estaciones ?? 0} estaciones`}
+          subtitle={estacionAeropuertoSanLuis?.nombre || "Aeropuerto San Luis"}
         />
         <StationCard
           title="Rango Actual"
@@ -263,30 +302,39 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Estado actual */}
-      {clima?.estado_actual && (
+      {/* Pronóstico para Hoy */}
+      {clima?.pronostico_hoy && (
         <div className="estado-actual">
           <h2 className="section-title">
             <span className="section-icon">
-              <MapPinIcon />
+              <CalendarIcon />
             </span>
-            Estado Actual
+            Pronóstico para Hoy
           </h2>
           <div className="estado-content">
-            {clima.estado_actual.cielo && (
+            {clima.pronostico_hoy.descripcion && (
+              <p className="pronostico-hoy-descripcion">
+                {clima.pronostico_hoy.descripcion}
+              </p>
+            )}
+            
+            {/* Cielo */}
+            {clima.pronostico_hoy.cielo && (
               <p className="estado-item">
                 <span className="estado-icon">
                   <CloudIcon />
                 </span>
-                {clima.estado_actual.cielo}
+                {clima.pronostico_hoy.cielo}
               </p>
             )}
-            {clima.estado_actual.viento && (
+            
+            {/* Viento */}
+            {clima.pronostico_hoy.viento && (
               <p className="estado-item">
                 <span className="estado-icon">
                   <WindIcon />
                 </span>
-                {clima.estado_actual.viento}
+                {clima.pronostico_hoy.viento}
               </p>
             )}
           </div>
