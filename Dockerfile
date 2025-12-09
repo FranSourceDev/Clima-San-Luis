@@ -54,11 +54,11 @@ ENV FLASK_ENV=production
 # El puerto se pasa como variable de entorno, no necesitamos EXPOSE con variable
 EXPOSE 5000
 
-# Establecer directorio de trabajo base
-WORKDIR /app
+# Establecer directorio de trabajo final (donde está wsgi.py)
+WORKDIR /app/backend
 
-# Comando usando formato shell para permitir cd
-# Este formato permite que Railway use comandos con cd en el Start Command
-# También funciona si Railway ejecuta: cd backend && gunicorn wsgi:app ...
-CMD ["/bin/sh", "-c", "cd /app/backend && exec gunicorn wsgi:app --bind 0.0.0.0:${PORT:-5000} --workers 2 --threads 2 --timeout 120"]
+# Usar formato exec para que gunicorn reciba señales correctamente
+# Railway pasará PORT como variable de entorno
+# Usamos formato de shell para expandir $PORT
+CMD ["/bin/sh", "-c", "exec gunicorn wsgi:app --bind 0.0.0.0:${PORT:-5000} --workers 2 --threads 2 --timeout 120"]
 
