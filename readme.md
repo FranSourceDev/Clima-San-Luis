@@ -227,9 +227,8 @@ Crear pruebas para:
 1. **Base de Datos**: Almacenar histórico de clima
 2. **Gráficos**: Visualizar tendencias de temperatura
 3. **Predicción**: Mostrar pronóstico de varios días
-4. **Web Dashboard**: Interfaz web para visualizar datos
-5. **API REST**: Exponer datos a otras aplicaciones
-6. **Machine Learning**: Predicciones basadas en histórico
+4. **API REST**: Exponer datos a otras aplicaciones
+5. **Machine Learning**: Predicciones basadas en histórico
 
 ## 📄 Licencia
 
