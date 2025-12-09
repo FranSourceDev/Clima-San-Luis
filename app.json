@@ -1,0 +1,30 @@
+{
+  "name": "Clima San Luis",
+  "description": "Dashboard de clima para San Luis, Argentina",
+  "repository": "https://github.com/tu-usuario/Clima-San-Luis",
+  "logo": "",
+  "keywords": ["python", "flask", "react", "clima"],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "env": {
+    "FLASK_ENV": {
+      "value": "production"
+    },
+    "PORT": {
+      "value": "5000"
+    }
+  }
+}
+

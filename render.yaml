@@ -2,12 +2,10 @@ services:
   - type: web
     name: clima-san-luis
     runtime: python
+    plan: free
     buildCommand: |
       pip install -r backend/requirements.txt
-      cd frontend
-      npm install
-      npm run build
-      cd ..
+      cd frontend && npm install && npm run build
     startCommand: cd backend && gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120
     envVars:
       - key: FLASK_ENV
