@@ -56,6 +56,6 @@ EXPOSE 5000
 # Establecer directorio de trabajo final
 WORKDIR /app/backend
 
-# Comando de inicio (usar sh -c para que $PORT se expanda correctamente)
-CMD ["sh", "-c", "gunicorn wsgi:app --bind 0.0.0.0:${PORT:-5000} --workers 2 --threads 2 --timeout 120"]
+# Comando simple sin cd - usar WORKDIR y variable PORT de Railway
+CMD gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120
 
