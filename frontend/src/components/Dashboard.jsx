@@ -347,14 +347,14 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Gráfico de temperaturas */}
-      {estaciones.length > 0 && (
-        <TemperatureChart estaciones={estaciones} maxItems={25} />
-      )}
-
       {/* Mapa de temperaturas */}
       {estaciones.length > 0 && (
         <TemperatureMap estaciones={estaciones} />
+      )}
+
+      {/* Gráfico de temperaturas */}
+      {estaciones.length > 0 && (
+        <TemperatureChart estaciones={estaciones} maxItems={25} />
       )}
 
       {/* Pronóstico extendido */}
