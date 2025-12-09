@@ -34,13 +34,17 @@ FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
 
 # Habilitar CORS para permitir peticiones desde el frontend React
 # En desarrollo: localhost, en producción: URL del frontend
-cors_origins = [FRONTEND_URL]
+cors_origins = [FRONTEND_URL] if FRONTEND_URL else []
 if FLASK_ENV == 'development':
     cors_origins.extend(['http://localhost:5173', 'http://127.0.0.1:5173'])
 
+# En producción, también permitir el mismo dominio (para URLs relativas)
+if FLASK_ENV == 'production':
+    cors_origins.append('*')  # Permitir cualquier origen cuando frontend y backend están juntos
+
 CORS(app, resources={
     r"/api/*": {
-        "origins": cors_origins,
+        "origins": cors_origins if cors_origins else ["*"],
         "methods": ["GET"],
         "allow_headers": ["Content-Type"]
     }

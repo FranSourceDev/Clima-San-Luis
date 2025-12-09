@@ -6,8 +6,21 @@ import StationCard from './StationCard';
 import ThemeToggle from './ThemeToggle';
 
 // URL de la API - configurable mediante variable de entorno
-// En desarrollo: usa localhost, en producción: usa la variable VITE_API_URL
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// En desarrollo: usa localhost, en producción: usa URL relativa o VITE_API_URL
+const getApiUrl = () => {
+  // Si hay VITE_API_URL configurada, usarla
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // En producción (no localhost), usar URL relativa
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return '/api';
+  }
+  // Desarrollo local
+  return 'http://localhost:5000/api';
+};
+
+const API_URL = getApiUrl();
 
 // SVG Icons
 const SunCloudIcon = () => (
