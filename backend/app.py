@@ -20,9 +20,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Agregar el directorio raíz al path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, root_dir)
 
-app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
+# Configurar ruta de archivos estáticos (absoluta para mayor compatibilidad)
+static_folder_path = os.path.join(root_dir, 'frontend', 'dist')
+app = Flask(__name__, static_folder=static_folder_path, static_url_path='')
 
 # Configuración según ambiente
 FLASK_ENV = os.getenv('FLASK_ENV', 'development')
