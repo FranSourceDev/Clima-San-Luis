@@ -4,9 +4,10 @@
 # Usar imagen base con Python 3.12
 FROM python:3.12-slim
 
-# Instalar Node.js 20.x
+# Instalar Node.js 20.x y bash
 RUN apt-get update && apt-get install -y \
     curl \
+    bash \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
@@ -53,9 +54,11 @@ ENV FLASK_ENV=production
 # El puerto se pasa como variable de entorno, no necesitamos EXPOSE con variable
 EXPOSE 5000
 
-# Establecer directorio de trabajo final
-WORKDIR /app/backend
+# Establecer directorio de trabajo base
+WORKDIR /app
 
-# Comando simple sin cd - usar WORKDIR y variable PORT de Railway
-CMD gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120
+# Comando usando formato shell para permitir cd
+# Este formato permite que Railway use comandos con cd en el Start Command
+# También funciona si Railway ejecuta: cd backend && gunicorn wsgi:app ...
+CMD ["/bin/sh", "-c", "cd /app/backend && exec gunicorn wsgi:app --bind 0.0.0.0:${PORT:-5000} --workers 2 --threads 2 --timeout 120"]
 
