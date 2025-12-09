@@ -50,9 +50,12 @@ ENV PYTHONUNBUFFERED=1
 ENV FLASK_ENV=production
 
 # Exponer puerto (Railway lo asignará automáticamente)
-EXPOSE $PORT
+# El puerto se pasa como variable de entorno, no necesitamos EXPOSE con variable
+EXPOSE 5000
 
-# Comando de inicio
+# Establecer directorio de trabajo final
 WORKDIR /app/backend
-CMD gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120
+
+# Comando de inicio (usar sh -c para que $PORT se expanda correctamente)
+CMD ["sh", "-c", "gunicorn wsgi:app --bind 0.0.0.0:${PORT:-5000} --workers 2 --threads 2 --timeout 120"]
 
