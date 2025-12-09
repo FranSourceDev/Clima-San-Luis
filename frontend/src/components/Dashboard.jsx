@@ -5,7 +5,9 @@ import TemperatureMap from './TemperatureMap';
 import StationCard from './StationCard';
 import ThemeToggle from './ThemeToggle';
 
-const API_URL = 'http://localhost:5000/api';
+// URL de la API - configurable mediante variable de entorno
+// En desarrollo: usa localhost, en producción: usa la variable VITE_API_URL
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // SVG Icons
 const SunCloudIcon = () => (

@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: clima-san-luis
+    runtime: python
+    buildCommand: |
+      pip install -r backend/requirements.txt
+      cd frontend
+      npm install
+      npm run build
+      cd ..
+    startCommand: cd backend && gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 120
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        fromService:
+          type: web
+          name: clima-san-luis
+          property: port
+      - key: FRONTEND_URL
+        sync: false
+      - key: VITE_API_URL
+        sync: false
+
