@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 import sys
 import os
+import time
 
 # Agregar el directorio raíz al path para importar módulos existentes
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -19,7 +20,6 @@ CACHE_DURATION = 60  # segundos
 
 def get_clima_data():
     """Obtiene datos del clima con cache simple."""
-    import time
     current_time = time.time()
     
     if _cache['data'] is None or (current_time - _cache['timestamp']) > CACHE_DURATION:
@@ -175,10 +175,4 @@ def get_resumen():
         'total_estaciones': len(temps),
         'hay_alerta': pronostico.get('alerta_meteorologica') is not None
     })
-
-
-
-
-
-
 

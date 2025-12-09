@@ -155,35 +155,26 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  // Función helper para buscar estación por nombre
+  // Función helper para buscar estación por nombre (búsqueda flexible)
   const buscarEstacionPorNombre = (nombreBuscar, listaEstaciones) => {
     if (!listaEstaciones || listaEstaciones.length === 0) return null;
     
     const nombreLower = nombreBuscar.toLowerCase().trim();
     
-    // Primero buscar coincidencias exactas o más específicas
-    // Priorizar "Ciudad de San Luis" sobre "San Luis Rural" u otras variaciones
-    const coincidenciasExactas = listaEstaciones.filter(est => {
+    // Buscar coincidencia exacta primero
+    const coincidenciaExacta = listaEstaciones.find(est => 
+      est.nombre.toLowerCase() === nombreLower
+    );
+    if (coincidenciaExacta) return coincidenciaExacta;
+    
+    // Buscar coincidencia parcial (contiene el nombre buscado)
+    const coincidenciasParciales = listaEstaciones.filter(est => {
       const nombreEst = est.nombre.toLowerCase();
-      return nombreEst === nombreLower || 
-             nombreEst === `ciudad de ${nombreLower}` ||
-             nombreEst.includes(`ciudad de ${nombreLower}`);
+      return nombreEst.includes(nombreLower) || nombreLower.includes(nombreEst.split(' ')[0]);
     });
     
-    if (coincidenciasExactas.length > 0) {
-      // Priorizar la que tenga "Ciudad de" en el nombre
-      const ciudadDe = coincidenciasExactas.find(est => 
-        est.nombre.toLowerCase().includes('ciudad de')
-      );
-      return ciudadDe || coincidenciasExactas[0];
-    }
-    
-    // Si no hay coincidencia exacta, buscar parcial
-    for (const estacion of listaEstaciones) {
-      const nombreEst = estacion.nombre.toLowerCase();
-      if (nombreEst.includes(nombreLower) || nombreLower.includes(nombreEst.split(' ')[0])) {
-        return estacion;
-      }
+    if (coincidenciasParciales.length > 0) {
+      return coincidenciasParciales[0];
     }
     
     return null;

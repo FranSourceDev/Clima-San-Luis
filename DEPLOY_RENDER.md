@@ -1,6 +1,6 @@
-# Guía de Deploy en Render - Clima San Luis
+# Guía de Deploy - Clima San Luis
 
-Guía paso a paso para desplegar el proyecto en Render.
+Esta guía explica cómo desplegar el proyecto en Render (recomendado) y otras plataformas.
 
 ## 📋 Prerequisitos
 
@@ -184,6 +184,10 @@ Para actualizar la aplicación:
 Para redeploy manual:
 - Ve a **Manual Deploy** en tu servicio
 - Click en **"Deploy latest commit"**
+
+## 🚂 Otras Opciones de Deploy
+
+Si Render no funciona para ti, consulta `ALTERNATIVAS_DEPLOY.md` para ver otras opciones como Railway, Fly.io, Heroku, etc.
 
 ## 📚 Recursos
 

@@ -228,11 +228,6 @@ Separar el frontend y backend puede ser más fácil.
 
 - `render.yaml` - Para Render ✅
 - `Dockerfile` - Para Railway/Docker ✅
-- `Dockerfile.simple` - Versión simplificada ✅
-- `Dockerfile.fly` - Para Fly.io ✅
-- `fly.toml` - Configuración Fly.io ✅
-- `heroku.yml` - Para Heroku ✅
-- `app.json` - Configuración Heroku ✅
 
 ---
 

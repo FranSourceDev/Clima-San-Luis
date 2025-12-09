@@ -39,9 +39,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
-
-
-
-
+# Archivos de backup
+*.bak
+*.backup
+*.tmp
+*.old
 

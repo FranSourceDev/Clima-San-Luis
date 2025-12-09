@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
 import { useTheme } from '../contexts/ThemeContext';
 import 'leaflet/dist/leaflet.css';
@@ -35,9 +35,11 @@ export default function TemperatureMap({ estaciones }) {
   );
   
   // Seleccionar tiles según el tema
-  const tileUrl = theme === 'dark' 
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  const tileUrl = useMemo(() => {
+    return theme === 'dark'
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  }, [theme]);
 
   return (
     <div className="map-container">
@@ -82,16 +84,11 @@ export default function TemperatureMap({ estaciones }) {
                   mouseleave: () => setHoveredStation(null)
                 }}
               >
-                {/* Tooltip permanente con nombre y temperatura - opacidad baja que se ilumina en hover */}
                 <Tooltip 
                   direction="top" 
                   offset={[0, -8]} 
                   className={`temp-tooltip-hover ${isHovered ? 'tooltip-hovered' : ''}`}
                   permanent={true}
-                  eventHandlers={{
-                    mouseenter: () => setHoveredStation(estacion.id),
-                    mouseleave: () => setHoveredStation(null)
-                  }}
                 >
                   <div className="tooltip-hover-content">
                     <strong className="tooltip-name-hover">{estacion.nombre}</strong>
