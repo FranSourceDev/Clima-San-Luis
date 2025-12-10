@@ -1,7 +1,31 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
 import { useTheme } from '../contexts/ThemeContext';
 import 'leaflet/dist/leaflet.css';
+
+// Hook para detectar el tamaño de pantalla
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    height: typeof window !== 'undefined' ? window.innerHeight : 800,
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowSize;
+};
 
 // Map Icon SVG
 const MapIcon = () => (
@@ -25,6 +49,7 @@ const getTemperatureColor = (temp, theme) => {
 
 export default function TemperatureMap({ estaciones }) {
   const { theme } = useTheme();
+  const windowSize = useWindowSize();
   // Centro de San Luis provincia
   const center = [-33.3, -66.3];
   const [hoveredStation, setHoveredStation] = useState(null);
@@ -40,6 +65,26 @@ export default function TemperatureMap({ estaciones }) {
       ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
       : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
   }, [theme]);
+  
+  // Ajustar zoom inicial según el tamaño de pantalla
+  const initialZoom = useMemo(() => {
+    if (windowSize.width <= 480) return 7;
+    if (windowSize.width <= 768) return 7.5;
+    return 8;
+  }, [windowSize.width]);
+  
+  // Ajustar tamaño de marcadores según el tamaño de pantalla
+  const markerRadius = useMemo(() => {
+    if (windowSize.width <= 480) return 5;
+    if (windowSize.width <= 768) return 5.5;
+    return 6;
+  }, [windowSize.width]);
+  
+  // Ajustar peso del borde del marcador
+  const markerWeight = useMemo(() => {
+    if (windowSize.width <= 480) return 2.5;
+    return 3;
+  }, [windowSize.width]);
 
   return (
     <div className="map-container">
@@ -52,9 +97,10 @@ export default function TemperatureMap({ estaciones }) {
       <div className="map-wrapper">
         <MapContainer
           center={center}
-          zoom={8}
+          zoom={initialZoom}
           scrollWheelZoom={true}
           className="leaflet-map"
+          key={`map-${windowSize.width}-${theme}`}
         >
           {/* Mapa base - cambia según el tema */}
           <TileLayer
@@ -71,12 +117,12 @@ export default function TemperatureMap({ estaciones }) {
               <CircleMarker
                 key={estacion.id}
                 center={[estacion.latitud, estacion.longitud]}
-                radius={6}
+                radius={markerRadius}
                 pathOptions={{
                   fillColor: theme === 'dark' ? '#1a1a1a' : '#ffffff',
                   fillOpacity: 0.95,
                   color: getTemperatureColor(estacion.temperatura, theme),
-                  weight: 3,
+                  weight: markerWeight,
                   opacity: 1
                 }}
                 eventHandlers={{

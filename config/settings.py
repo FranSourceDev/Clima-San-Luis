@@ -32,3 +32,5 @@ LOG_FILE = "logs/clima.log"
 
 
 
+
+

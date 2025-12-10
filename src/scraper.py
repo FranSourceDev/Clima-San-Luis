@@ -273,14 +273,28 @@ def extraer_pronostico_extendido(texto):
     
     texto_extendido = texto[extendido_idx:]
     
-    # Patrón para encontrar días
-    dias_pattern = r'(Domingo|Lunes|Martes|Miércoles|Jueves|Viernes|Sábado)\s+(\d{1,2})\s+de\s+(\w+)\s+de\s+(\d{4})'
+    # Corregir errores comunes de tipeo en el HTML (ej: "Vienes" -> "Viernes")
+    texto_extendido = re.sub(r'\bVienes\b', 'Viernes', texto_extendido, flags=re.IGNORECASE)
+    texto_extendido = re.sub(r'\bMiercoles\b', 'Miércoles', texto_extendido, flags=re.IGNORECASE)
+    texto_extendido = re.sub(r'\bSabado\b', 'Sábado', texto_extendido, flags=re.IGNORECASE)
+    
+    # Patrón para encontrar días (incluyendo variantes comunes con y sin acentos)
+    dias_pattern = r'(Domingo|Lunes|Martes|Mi[ée]rcoles|Jueves|Viernes|Vienes|S[áa]bado)\s+(\d{1,2})\s+de\s+(\w+)\s+de\s+(\d{4})'
     
     matches = list(re.finditer(dias_pattern, texto_extendido, re.IGNORECASE))
     
     for i, match in enumerate(matches):
+        # Normalizar el nombre del día
+        dia_nombre = match.group(1)
+        if dia_nombre.lower() == 'vienes':
+            dia_nombre = 'Viernes'
+        elif dia_nombre.lower() == 'miercoles' or dia_nombre.lower() == 'miércoles':
+            dia_nombre = 'Miércoles'
+        elif dia_nombre.lower() == 'sabado' or dia_nombre.lower() == 'sábado':
+            dia_nombre = 'Sábado'
+        
         dia_info = {
-            'dia': match.group(1),
+            'dia': dia_nombre,
             'fecha': f"{match.group(2)} de {match.group(3)} de {match.group(4)}",
             'descripcion': '',
             'temperatura_minima': None,
@@ -446,6 +460,8 @@ if __name__ == "__main__":
                 print(f"  {estacion['nombre']}: {estacion['temperatura']}°C")
     else:
         print(f"Error: {clima['error']}")
+
+
 
 
 

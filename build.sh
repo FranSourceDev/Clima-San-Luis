@@ -56,3 +56,4 @@ echo "   cd backend && gunicorn wsgi:app"
 
 cd ..
 
+

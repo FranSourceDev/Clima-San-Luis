@@ -11,6 +11,30 @@ import {
   Cell
 } from 'recharts';
 
+// Hook para detectar el tamaño de pantalla
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    height: typeof window !== 'undefined' ? window.innerHeight : 800,
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowSize;
+};
+
 // Helper para obtener valores de variables CSS
 const getCSSVariable = (variableName) => {
   return getComputedStyle(document.documentElement)
@@ -56,6 +80,7 @@ const CustomTooltip = ({ active, payload, theme }) => {
 
 export default function TemperatureChart({ estaciones, maxItems = 20 }) {
   const { theme } = useTheme();
+  const windowSize = useWindowSize();
   const [chartColors, setChartColors] = useState(() => ({
     borderColor: getCSSVariable('--border-color') || '#eaeaea',
     textPrimary: getCSSVariable('--text-primary') || '#171717',
@@ -63,6 +88,46 @@ export default function TemperatureChart({ estaciones, maxItems = 20 }) {
     textMuted: getCSSVariable('--text-muted') || '#999999',
     accentBlue: getCSSVariable('--accent-blue') || '#0070f3'
   }));
+  
+  // Calcular altura y márgenes según el tamaño de pantalla
+  const chartHeight = useMemo(() => {
+    if (windowSize.width <= 480) return 300;
+    if (windowSize.width <= 768) return 400;
+    return 500;
+  }, [windowSize.width]);
+  
+  const chartMargins = useMemo(() => {
+    if (windowSize.width <= 480) {
+      return { top: 10, right: 10, left: 100, bottom: 10 };
+    }
+    if (windowSize.width <= 768) {
+      return { top: 10, right: 20, left: 140, bottom: 10 };
+    }
+    return { top: 10, right: 30, left: 160, bottom: 10 };
+  }, [windowSize.width]);
+  
+  const yAxisWidth = useMemo(() => {
+    if (windowSize.width <= 480) return 95;
+    if (windowSize.width <= 768) return 135;
+    return 155;
+  }, [windowSize.width]);
+  
+  const fontSize = useMemo(() => {
+    if (windowSize.width <= 480) return 10;
+    return 11;
+  }, [windowSize.width]);
+  
+  const barSize = useMemo(() => {
+    if (windowSize.width <= 480) return 14;
+    if (windowSize.width <= 768) return 16;
+    return 18;
+  }, [windowSize.width]);
+  
+  const tickFormatterMaxLength = useMemo(() => {
+    if (windowSize.width <= 480) return 15;
+    if (windowSize.width <= 768) return 20;
+    return 25;
+  }, [windowSize.width]);
   
   // Actualizar colores cuando cambie el tema - usar requestAnimationFrame para asegurar que las CSS se actualizaron
   useEffect(() => {
@@ -102,12 +167,43 @@ export default function TemperatureChart({ estaciones, maxItems = 20 }) {
     return nombreLimpio || nombre; // Si queda vacío, usar el original
   };
 
-  // Tomar las primeras N estaciones (ya vienen ordenadas por temperatura)
+  // Filtrar y tomar las primeras N estaciones con temperatura válida
   const data = useMemo(() => {
-    return estaciones.slice(0, maxItems).map(est => ({
-      ...est,
-      nombre: limpiarNombre(est.nombre)
-    }));
+    // Filtrar estaciones con temperatura válida (no null, no undefined, no NaN)
+    const estacionesValidas = estaciones.filter(
+      est => est.temperatura !== null && 
+             est.temperatura !== undefined && 
+             !isNaN(est.temperatura) &&
+             est.nombre &&
+             typeof est.temperatura === 'number'
+    );
+    
+    // Eliminar duplicados por ID antes de procesar
+    const estacionesUnicas = estacionesValidas.filter((est, index, self) =>
+      index === self.findIndex(e => e.id === est.id)
+    );
+    
+    // Tomar las primeras N estaciones y limpiar nombres
+    // Asegurar que cada nombre sea único agregando el ID si hay duplicados
+    const nombresUsados = new Set();
+    return estacionesUnicas.slice(0, maxItems).map((est, index) => {
+      let nombreLimpio = limpiarNombre(est.nombre);
+      
+      // Si el nombre ya existe, agregar el ID para hacerlo único
+      if (nombresUsados.has(nombreLimpio)) {
+        nombreLimpio = `${nombreLimpio} (${est.id})`;
+      }
+      nombresUsados.add(nombreLimpio);
+      
+      return {
+        ...est,
+        nombre: nombreLimpio,
+        // Asegurar que cada elemento tenga un identificador único para Recharts
+        uniqueId: est.id || `est-${index}-${nombreLimpio}`,
+        // Mantener el índice original para el orden
+        displayIndex: index
+      };
+    });
   }, [estaciones, maxItems]);
 
   return (
@@ -118,54 +214,74 @@ export default function TemperatureChart({ estaciones, maxItems = 20 }) {
         </span>
         Temperaturas por Estación
       </h2>
-      <ResponsiveContainer width="100%" height={500}>
-        <BarChart
-          key={`chart-${theme}`}
-          data={data}
-          layout="vertical"
-          margin={{ top: 10, right: 30, left: 140, bottom: 10 }}
-        >
-          <CartesianGrid 
-            strokeDasharray="3 3" 
-            stroke={chartColors.borderColor}
-            horizontal={true}
-            vertical={false}
-          />
-          <XAxis 
-            type="number" 
-            domain={[0, 'auto']}
-            stroke={chartColors.textMuted}
-            tick={{ fill: chartColors.textSecondary, fontSize: 12 }}
-            axisLine={{ stroke: chartColors.borderColor }}
-            tickFormatter={(value) => `${value}°`}
-          />
-          <YAxis 
-            type="category" 
-            dataKey="nombre"
-            stroke={chartColors.textMuted}
-            tick={{ fill: chartColors.textPrimary, fontSize: 11, fontWeight: 500 }}
-            axisLine={{ stroke: chartColors.borderColor }}
-            width={130}
-            tickFormatter={(value) => value && value.length > 25 ? value.substring(0, 22) + '...' : value}
-          />
-          <Tooltip 
-            content={<CustomTooltip theme={theme} />}
-            cursor={{ fill: theme === 'dark' ? 'rgba(0, 112, 243, 0.1)' : 'rgba(0, 112, 243, 0.05)' }}
-          />
-          <Bar 
-            dataKey="temperatura" 
-            radius={[0, 6, 6, 0]}
-            barSize={18}
+      <div className="chart-responsive-wrapper">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            key={`chart-${theme}-${windowSize.width}-${data.length}`}
+            data={data}
+            layout="vertical"
+            margin={chartMargins}
+            barCategoryGap="10%"
+            barGap={2}
           >
-            {data.map((entry, index) => (
-              <Cell 
-                key={`cell-${index}`} 
-                fill={getTemperatureColor(entry.temperatura, theme)}
-              />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+            <CartesianGrid 
+              strokeDasharray="3 3" 
+              stroke={chartColors.borderColor}
+              horizontal={true}
+              vertical={false}
+            />
+            <XAxis 
+              type="number" 
+              domain={[0, 'auto']}
+              stroke={chartColors.textMuted}
+              tick={{ fill: chartColors.textSecondary, fontSize: windowSize.width <= 480 ? 10 : 12 }}
+              axisLine={{ stroke: chartColors.borderColor }}
+              tickFormatter={(value) => `${value}°`}
+            />
+            <YAxis 
+              type="category" 
+              dataKey="nombre"
+              stroke={chartColors.textMuted}
+              tick={{ 
+                fill: chartColors.textPrimary, 
+                fontSize: fontSize, 
+                fontWeight: 500,
+                dy: 0
+              }}
+              axisLine={{ stroke: chartColors.borderColor }}
+              width={yAxisWidth}
+              interval={0}
+              tickFormatter={(value) => {
+                if (!value) return value;
+                // Si el nombre incluye el ID entre paréntesis, mostrarlo truncado sin el ID
+                const nombreSinId = value.replace(/\s*\(\d+\)$/, '');
+                if (nombreSinId.length > tickFormatterMaxLength) {
+                  return nombreSinId.substring(0, tickFormatterMaxLength - 3) + '...';
+                }
+                return nombreSinId;
+              }}
+            />
+            <Tooltip 
+              content={<CustomTooltip theme={theme} />}
+              cursor={{ fill: theme === 'dark' ? 'rgba(0, 112, 243, 0.1)' : 'rgba(0, 112, 243, 0.05)' }}
+            />
+            <Bar 
+              dataKey="temperatura" 
+              radius={[0, 6, 6, 0]}
+              barSize={barSize}
+              isAnimationActive={true}
+              minPointSize={1}
+            >
+              {data.map((entry) => (
+                <Cell 
+                  key={`cell-${entry.uniqueId}`} 
+                  fill={getTemperatureColor(entry.temperatura, theme)}
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
       <div className="chart-legend">
         <span className="legend-item">
           <span className="legend-color" style={{ background: getTemperatureColor(5, theme) }}></span>
