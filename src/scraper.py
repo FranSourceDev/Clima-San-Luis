@@ -159,15 +159,34 @@ def procesar_pronostico_hoy(texto):
         'cielo': ''
     }
     
-    # Extraer temperaturas
-    temp_pattern = r'(\d+)[°ºC]+'
-    temps = re.findall(temp_pattern, texto)
+    # Extraer temperaturas buscando contexto (mínima/máxima)
+    texto_lower = texto.lower()
     
-    if len(temps) >= 2:
-        pronostico['temperatura_minima'] = int(temps[0])
-        pronostico['temperatura_maxima'] = int(temps[1])
-    elif len(temps) == 1:
-        pronostico['temperatura_maxima'] = int(temps[0])
+    # Buscar temperatura mínima usando contexto
+    minima_match = re.search(r'(?:m[íi]nimas?|m[íi]nima|mín\.|min\.|estarán en torno a los)\s*(?:de|en torno a|serán de)?\s*(\d+)[°ºC]+', texto_lower)
+    if minima_match:
+        pronostico['temperatura_minima'] = int(minima_match.group(1))
+    
+    # Buscar temperatura máxima usando contexto
+    maxima_match = re.search(r'(?:m[áa]ximas?|m[áa]xima|m[áa]x\.|max\.|alcanzarán)\s*(?:de|los|serán de)?\s*(\d+)[°ºC]+', texto_lower)
+    if maxima_match:
+        pronostico['temperatura_maxima'] = int(maxima_match.group(1))
+    
+    # Si no se encontraron con contexto, buscar todas las temperaturas y asignar por orden numérico
+    if pronostico['temperatura_minima'] is None or pronostico['temperatura_maxima'] is None:
+        temp_pattern = r'(\d+)[°ºC]+'
+        temps = re.findall(temp_pattern, texto)
+        if len(temps) >= 2:
+            temp_values = [int(t) for t in temps]
+            # La menor es mínima, la mayor es máxima
+            if pronostico['temperatura_minima'] is None:
+                pronostico['temperatura_minima'] = min(temp_values)
+            if pronostico['temperatura_maxima'] is None:
+                pronostico['temperatura_maxima'] = max(temp_values)
+        elif len(temps) == 1:
+            temp_value = int(temps[0])
+            if pronostico['temperatura_maxima'] is None:
+                pronostico['temperatura_maxima'] = temp_value
     
     # Procesar líneas
     lineas = texto.split('\n')
@@ -311,11 +330,39 @@ def extraer_pronostico_extendido(texto):
         descripcion = texto_extendido[start:end].strip()
         dia_info['descripcion'] = limpiar_texto(descripcion)
         
-        # Extraer temperaturas
-        temps = re.findall(r'(\d+)[°ºC]+', descripcion)
-        if len(temps) >= 2:
-            dia_info['temperatura_minima'] = int(temps[0])
-            dia_info['temperatura_maxima'] = int(temps[1])
+        # Extraer temperaturas buscando contexto (mínima/máxima)
+        descripcion_lower = descripcion.lower()
+        
+        # Buscar temperatura mínima usando contexto
+        minima_match = re.search(r'(?:m[íi]nimas?|m[íi]nima|mín\.|min\.)\s*(?:ser[áa]n?|de|est[áa]n?)?\s*de?\s*(\d+)[°ºC]+', descripcion_lower)
+        if minima_match:
+            dia_info['temperatura_minima'] = int(minima_match.group(1))
+        
+        # Buscar temperatura máxima usando contexto
+        maxima_match = re.search(r'(?:m[áa]ximas?|m[áa]xima|m[áa]x\.|max\.)\s*(?:ser[áa]n?|de|est[áa]n?|alcanzar[áa]n?)?\s*de?\s*(\d+)[°ºC]+', descripcion_lower)
+        if maxima_match:
+            dia_info['temperatura_maxima'] = int(maxima_match.group(1))
+        
+        # Si no se encontraron con contexto, buscar todas las temperaturas y asignar por orden numérico
+        if dia_info['temperatura_minima'] is None or dia_info['temperatura_maxima'] is None:
+            temps = re.findall(r'(\d+)[°ºC]+', descripcion)
+            if len(temps) >= 2:
+                temp_values = [int(t) for t in temps]
+                # La menor es mínima, la mayor es máxima
+                if dia_info['temperatura_minima'] is None:
+                    dia_info['temperatura_minima'] = min(temp_values)
+                if dia_info['temperatura_maxima'] is None:
+                    dia_info['temperatura_maxima'] = max(temp_values)
+            elif len(temps) == 1:
+                temp_value = int(temps[0])
+                # Si solo hay una temperatura, intentar determinar si es mínima o máxima
+                # Si ya tenemos una, usar esta para la otra
+                if dia_info['temperatura_minima'] is None and dia_info['temperatura_maxima'] is not None:
+                    if temp_value < dia_info['temperatura_maxima']:
+                        dia_info['temperatura_minima'] = temp_value
+                elif dia_info['temperatura_maxima'] is None and dia_info['temperatura_minima'] is not None:
+                    if temp_value > dia_info['temperatura_minima']:
+                        dia_info['temperatura_maxima'] = temp_value
         
         pronosticos.append(dia_info)
     
