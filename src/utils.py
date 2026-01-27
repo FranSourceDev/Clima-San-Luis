@@ -133,6 +133,70 @@ def limpiar_texto(texto):
     return texto.strip()
 
 
+def guardar_ultimo_clima(clima_data):
+    """
+    Guarda el último clima exitoso en un archivo JSON.
+    
+    Args:
+        clima_data: Diccionario con los datos del clima
+        
+    Returns:
+        bool: True si se guardó correctamente, False en caso contrario
+    """
+    import json
+    
+    try:
+        # Directorio para guardar el caché
+        cache_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
+        os.makedirs(cache_dir, exist_ok=True)
+        
+        cache_file = os.path.join(cache_dir, 'ultimo_clima.json')
+        
+        # Agregar timestamp
+        clima_data['timestamp_guardado'] = datetime.now().isoformat()
+        
+        with open(cache_file, 'w', encoding='utf-8') as f:
+            json.dump(clima_data, f, ensure_ascii=False, indent=2)
+        
+        logger = setup_logger()
+        logger.info(f"Último clima guardado en {cache_file}")
+        return True
+        
+    except Exception as e:
+        logger = setup_logger()
+        logger.error(f"Error al guardar último clima: {e}")
+        return False
+
+
+def cargar_ultimo_clima():
+    """
+    Carga el último clima guardado desde el archivo JSON.
+    
+    Returns:
+        dict: Datos del último clima guardado o None si no existe
+    """
+    import json
+    
+    try:
+        cache_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
+        cache_file = os.path.join(cache_dir, 'ultimo_clima.json')
+        
+        if not os.path.exists(cache_file):
+            return None
+        
+        with open(cache_file, 'r', encoding='utf-8') as f:
+            clima_data = json.load(f)
+        
+        logger = setup_logger()
+        logger.info(f"Último clima cargado desde {cache_file}")
+        return clima_data
+        
+    except Exception as e:
+        logger = setup_logger()
+        logger.error(f"Error al cargar último clima: {e}")
+        return None
+
+
 
 
 

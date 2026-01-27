@@ -27,6 +27,21 @@ def notificar_consola(clima):
     
     print("\n" + "=" * 60)
     print(f"🌤️  CLIMA SAN LUIS - {fecha}")
+    
+    # Indicar si se están usando datos del caché
+    if clima.get('usando_cache'):
+        timestamp_guardado = clima.get('timestamp_guardado', 'desconocido')
+        if timestamp_guardado != 'desconocido':
+            from datetime import datetime
+            try:
+                dt = datetime.fromisoformat(timestamp_guardado)
+                fecha_guardado = dt.strftime('%d/%m/%Y %H:%M')
+            except:
+                fecha_guardado = timestamp_guardado
+        else:
+            fecha_guardado = 'desconocido'
+        print(f"⚠️  USANDO DATOS GUARDADOS (última actualización: {fecha_guardado})")
+    
     print("=" * 60)
     
     # Estado actual
@@ -143,6 +158,12 @@ def notificar_archivo(clima, ruta=None):
     contenido.append("=" * 60)
     contenido.append(f"CLIMA SAN LUIS - {fecha}")
     contenido.append(f"Generado: {datetime.now().strftime('%H:%M:%S')}")
+    
+    # Indicar si se están usando datos del caché
+    if clima.get('usando_cache'):
+        timestamp_guardado = clima.get('timestamp_guardado', 'desconocido')
+        contenido.append(f"⚠️ USANDO DATOS GUARDADOS (última actualización: {timestamp_guardado})")
+    
     contenido.append("=" * 60)
     
     if not clima['exito']:

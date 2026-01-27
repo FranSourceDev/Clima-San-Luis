@@ -37,29 +37,58 @@ python-dotenv==1.0.0
 - **Linux/Mac**: cron
 - **Windows**: Task Scheduler o el propio módulo `schedule` de Python
 
+## ✨ Características Principales
+
+### 🔄 Sistema de Caché y Respaldo Automático
+
+El proyecto incluye un **sistema de persistencia inteligente** que garantiza la disponibilidad de datos:
+
+- ✅ **Guardado automático**: Cada vez que se obtienen datos válidos, se guardan en `/logs/ultimo_clima.json`
+- ✅ **Recuperación automática**: Si el scraping falla o retorna vacío, se cargan los últimos datos guardados
+- ✅ **Alta disponibilidad**: Los datos están disponibles incluso si el sitio REM está caído
+- ✅ **Transparencia**: Se indica claramente cuando se usan datos del caché con timestamp
+
+**📖 Documentación completa**: Ver [SISTEMA_CACHE.md](./SISTEMA_CACHE.md)
+
+### Otros Componentes
+
+- **Web Scraping**: Extracción de datos en tiempo real del sitio oficial REM
+- **Programación automática**: Ejecución diaria programable
+- **Notificaciones múltiples**: Consola, archivo, escritorio
+- **Logging completo**: Registro de todas las operaciones
+
 ## 📁 Estructura del Proyecto
 
 ```
 clima-san-luis/
 │
 ├── README.md
+├── SISTEMA_CACHE.md         # Documentación del sistema de caché
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
 │
 ├── src/
 │   ├── __init__.py
-│   ├── scraper.py          # Lógica de web scraping
+│   ├── scraper.py          # Lógica de web scraping + sistema de caché
 │   ├── scheduler.py         # Programación de tareas
 │   ├── notifier.py          # Sistema de notificaciones
-│   └── utils.py             # Funciones auxiliares
+│   └── utils.py             # Funciones auxiliares + persistencia
 │
 ├── logs/
-│   └── .gitkeep
+│   ├── clima.log           # Logs de operación
+│   └── ultimo_clima.json   # Caché del último clima válido
 │
 ├── config/
 │   └── settings.py          # Configuraciones
 │
+├── backend/                 # API REST (opcional)
+│   ├── app.py
+│   └── routes/
+│       └── api.py
+│
+├── test_cache.py            # Pruebas del sistema de caché
+├── test_cache_fallback.py   # Pruebas de respaldo
 └── main.py                  # Script principal
 ```
 

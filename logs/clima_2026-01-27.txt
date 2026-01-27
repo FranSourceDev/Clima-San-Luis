@@ -1,0 +1,47 @@
+============================================================
+CLIMA SAN LUIS - Martes 27 de Enero de 2026
+Generado: 16:59:29
+============================================================
+
+--- ESTADO ACTUAL ---
+Cielo: El cielo está mayormente nublado con tormentas aisladas en la mitad norte provincial.
+Viento: El viento es leve a moderado del noroeste.
+
+--- ALERTA METEOROLÓGICA ---
+Descripción: la ocurrencia de lluvias y tormentas aisladas de variada intensidad, algunas localmente fuertes. Es probable que estos fenómenos estén acompañados por precipitaciones intensas, posible caída de granizo, importante actividad eléctrica y fuertes ráfagas de viento.Prónostico para HoyJornada con leve ascenso en las temperaturas máximas y condiciones de inestabilidad en el norte provincial. El cielo se presentará entre mayormente nublado y parcialmente nublado, acompañado de lluvias y tormentas de intensidad variable en las regiones centro y norte de la provincia. Las temperaturas mínimas rondarán los 15°C, mientras que las máximas alcanzarán un promedio de 31°C. Jornada con leve ascenso en las temperaturas máximas y condiciones de inestabilidad en el norte provincial. El cielo se presentará entre mayormente nublado y parcialmente nublado, acompañado de lluvias y tormentas de intensidad variable en las regiones centro y norte de la provincia. Las temperaturas mínimas rondarán los 15°C, mientras que las máximas alcanzarán un promedio de 31°C. Se prevé viento del noreste, rotando al este, con intensidades entre leves y moderadas (12 a 28 km/h) y ráfagas que podrían superar los 40 km/h, especialmente en las regiones sur y centro de la provincia durante la tarde.
+
+--- PRONÓSTICO PARA HOY ---
+Temperatura Mínima: 17°C
+Temperatura Máxima: 33°C
+Cielo: El cielo se presentará entre mayormente nublado y parcialmente nublado, acompañado de lluvias y tormentas de intensidad variable en las regiones centro y norte de la provincia.
+Viento: Se prevé viento del noreste, rotando al este, con intensidades entre leves y moderadas (12 a 28 km/h) y ráfagas que podrían superar los 40 km/h, especialmente en las regiones sur y centro de la provincia durante la tarde.
+
+--- PRONÓSTICO EXTENDIDO ---
+
+Miércoles 28 de enero de 2026
+  Min: 17°C / Max: 33°C
+  Jornada algo inestable con poco cambio de temperaturas. El cielo estará parcialmente nublado. En promedio, se esperan mínimas de 17°C y máximas de 33°C. El viento predominará del sector noreste.
+
+Jueves 29 de enero de 2026
+  Min: 19°C / Max: 33°C
+  Jornada con poco cambio de las temperaturas y algo inestable. El cielo estará de parcialmente nublado a nublado con baja probabilidad de precipitaciones aisladas. En promedio, se esperan mínimas de 19...
+
+Viernes 30 de enero de 2026
+  Min: 19°C / Max: 35°C
+  Jornada algo inestable con ascenso de las temperaturas. El cielo estará parcialmente nublado. En promedio, se esperan mínimas de 19°C y máximas de 35°C. El viento será predominante del sureste con alg...
+
+--- ESTACIONES ---
+  Aeropuerto San Luis: 31.2°C
+  Aeropuerto Valle del Conlara: 28.8°C
+  AgroZAL: 25.6°C
+  Alto Pelado: 28.1°C
+  Anchorena: 30.2°C
+  Bajada Nueva: 29.5°C
+  Baldecito: 30.0°C
+  Batavia: 30.0°C
+  Beazley: 35.1°C
+  Buena Esperanza: 27.6°C
+
+============================================================
+Fuente: clima.sanluis.gob.ar - REM
+============================================================

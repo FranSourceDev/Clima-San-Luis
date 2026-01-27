@@ -9,7 +9,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.settings import URL_CLIMA, REQUEST_TIMEOUT, REQUEST_HEADERS
-from src.utils import setup_logger, retry, limpiar_texto
+from src.utils import setup_logger, retry, limpiar_texto, guardar_ultimo_clima, cargar_ultimo_clima
 
 
 logger = setup_logger()
@@ -417,6 +417,7 @@ def extraer_estaciones_desde_js(html):
 def obtener_clima():
     """
     Función principal que obtiene toda la información del clima.
+    Si el scraping retorna vacío o falla, carga el último clima guardado.
     
     Returns:
         dict: Diccionario con toda la información meteorológica
@@ -431,24 +432,78 @@ def obtener_clima():
             'error': None
         }
         
-        logger.info("Datos del clima obtenidos correctamente")
+        # Validar que tengamos datos útiles
+        pronostico_vacio = (
+            clima['pronostico_general'] is None or
+            not clima['pronostico_general'].get('estado_actual') and 
+            not clima['pronostico_general'].get('pronostico_hoy')
+        )
+        estaciones_vacias = not clima['estaciones'] or len(clima['estaciones']) == 0
+        
+        # Si el scraping retornó vacío, intentar cargar el último clima guardado
+        if pronostico_vacio and estaciones_vacias:
+            logger.warning("El scraping retornó datos vacíos. Intentando cargar último clima guardado...")
+            ultimo_clima = cargar_ultimo_clima()
+            
+            if ultimo_clima:
+                logger.info("Usando último clima guardado como respaldo")
+                # Agregar marca de que estamos usando datos del caché
+                ultimo_clima['usando_cache'] = True
+                return ultimo_clima
+            else:
+                logger.warning("No hay clima previo guardado. Retornando datos vacíos.")
+                return clima
+        
+        # Si tenemos datos válidos, guardar para futuros usos
+        if not pronostico_vacio or not estaciones_vacias:
+            logger.info("Datos del clima obtenidos correctamente")
+            # Agregar marca de que estos son datos frescos
+            clima['usando_cache'] = False
+            guardar_ultimo_clima(clima)
+        
         return clima
         
     except requests.RequestException as e:
         logger.error(f"Error de conexión: {e}")
+        
+        # Intentar cargar el último clima guardado
+        logger.info("Intentando cargar último clima guardado debido a error de conexión...")
+        ultimo_clima = cargar_ultimo_clima()
+        
+        if ultimo_clima:
+            logger.info("Usando último clima guardado como respaldo")
+            ultimo_clima['usando_cache'] = True
+            ultimo_clima['error_original'] = str(e)
+            return ultimo_clima
+        
+        # Si no hay clima guardado, retornar error
         return {
             'pronostico_general': None,
             'estaciones': [],
             'exito': False,
-            'error': str(e)
+            'error': str(e),
+            'usando_cache': False
         }
     except Exception as e:
         logger.error(f"Error inesperado: {e}")
+        
+        # Intentar cargar el último clima guardado
+        logger.info("Intentando cargar último clima guardado debido a error inesperado...")
+        ultimo_clima = cargar_ultimo_clima()
+        
+        if ultimo_clima:
+            logger.info("Usando último clima guardado como respaldo")
+            ultimo_clima['usando_cache'] = True
+            ultimo_clima['error_original'] = str(e)
+            return ultimo_clima
+        
+        # Si no hay clima guardado, retornar error
         return {
             'pronostico_general': None,
             'estaciones': [],
             'exito': False,
-            'error': str(e)
+            'error': str(e),
+            'usando_cache': False
         }
 
 

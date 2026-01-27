@@ -1,0 +1,943 @@
+{
+  "pronostico_general": {
+    "estado_actual": {
+      "descripcion": "",
+      "cielo": "El cielo está mayormente nublado con tormentas aisladas en la mitad norte provincial.",
+      "temperatura": "Las temperaturas son templadas a cálidas.",
+      "viento": "El viento es leve a moderado del noroeste."
+    },
+    "pronostico_hoy": {
+      "descripcion": "Jornada con leve ascenso en las temperaturas máximas y condiciones de inestabilidad en el norte provincial. Las temperaturas mínimas rondarán los 15°C, mientras que las máximas alcanzarán un promedio de 31°C. Jornada con leve ascenso en las temperaturas máximas y condiciones de inestabilidad en el norte provincial. Las temperaturas mínimas rondarán los 15°C, mientras que las máximas alcanzarán un promedio de 31°C.",
+      "temperatura_minima": 17,
+      "temperatura_maxima": 33,
+      "viento": "Se prevé viento del noreste, rotando al este, con intensidades entre leves y moderadas (12 a 28 km/h) y ráfagas que podrían superar los 40 km/h, especialmente en las regiones sur y centro de la provincia durante la tarde.",
+      "cielo": "El cielo se presentará entre mayormente nublado y parcialmente nublado, acompañado de lluvias y tormentas de intensidad variable en las regiones centro y norte de la provincia."
+    },
+    "pronostico_extendido": [
+      {
+        "dia": "Miércoles",
+        "fecha": "28 de enero de 2026",
+        "descripcion": "Jornada algo inestable con poco cambio de temperaturas. El cielo estará parcialmente nublado. En promedio, se esperan mínimas de 17°C y máximas de 33°C. El viento predominará del sector noreste.",
+        "temperatura_minima": 17,
+        "temperatura_maxima": 33
+      },
+      {
+        "dia": "Jueves",
+        "fecha": "29 de enero de 2026",
+        "descripcion": "Jornada con poco cambio de las temperaturas y algo inestable. El cielo estará de parcialmente nublado a nublado con baja probabilidad de precipitaciones aisladas. En promedio, se esperan mínimas de 19°C y máximas de 33°C. El viento predominará del noreste con algunas ráfagas.",
+        "temperatura_minima": 19,
+        "temperatura_maxima": 33
+      },
+      {
+        "dia": "Viernes",
+        "fecha": "30 de enero de 2026",
+        "descripcion": "Jornada algo inestable con ascenso de las temperaturas. El cielo estará parcialmente nublado. En promedio, se esperan mínimas de 19°C y máximas de 35°C. El viento será predominante del sureste con algunas ráfagas.",
+        "temperatura_minima": 19,
+        "temperatura_maxima": 35
+      }
+    ],
+    "informe_especial": null,
+    "alerta_meteorologica": {
+      "zona_afectada": null,
+      "horario": null,
+      "descripcion": "la ocurrencia de lluvias y tormentas aisladas de variada intensidad, algunas localmente fuertes. Es probable que estos fenómenos estén acompañados por precipitaciones intensas, posible caída de granizo, importante actividad eléctrica y fuertes ráfagas de viento.Prónostico para HoyJornada con leve ascenso en las temperaturas máximas y condiciones de inestabilidad en el norte provincial. El cielo se presentará entre mayormente nublado y parcialmente nublado, acompañado de lluvias y tormentas de intensidad variable en las regiones centro y norte de la provincia. Las temperaturas mínimas rondarán los 15°C, mientras que las máximas alcanzarán un promedio de 31°C. Jornada con leve ascenso en las temperaturas máximas y condiciones de inestabilidad en el norte provincial. El cielo se presentará entre mayormente nublado y parcialmente nublado, acompañado de lluvias y tormentas de intensidad variable en las regiones centro y norte de la provincia. Las temperaturas mínimas rondarán los 15°C, mientras que las máximas alcanzarán un promedio de 31°C. Se prevé viento del noreste, rotando al este, con intensidades entre leves y moderadas (12 a 28 km/h) y ráfagas que podrían superar los 40 km/h, especialmente en las regiones sur y centro de la provincia durante la tarde."
+    }
+  },
+  "estaciones": [
+    {
+      "id": 58,
+      "nombre": "Aeropuerto San Luis",
+      "latitud": -33.275921,
+      "longitud": -66.353356,
+      "timestamp": 1769543940000,
+      "temperatura": 31.2,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 59,
+      "nombre": "Aeropuerto Valle del Conlara",
+      "latitud": -32.378914,
+      "longitud": -65.180141,
+      "timestamp": 1769543940000,
+      "temperatura": 28.8,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 88,
+      "nombre": "AgroZAL",
+      "latitud": -33.6450639,
+      "longitud": -65.3794056,
+      "timestamp": 1769543940000,
+      "temperatura": 25.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1,
+      "nombre": "Alto Pelado",
+      "latitud": -33.83756,
+      "longitud": -66.13864,
+      "timestamp": 1769543940000,
+      "temperatura": 28.1,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 2,
+      "nombre": "Anchorena",
+      "latitud": -35.6731,
+      "longitud": -65.42411,
+      "timestamp": 1769543940000,
+      "temperatura": 30.2,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 3,
+      "nombre": "Bajada Nueva",
+      "latitud": -35.16846,
+      "longitud": -66.49468,
+      "timestamp": 1769543940000,
+      "temperatura": 29.5,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 4,
+      "nombre": "Baldecito",
+      "latitud": -32.34821,
+      "longitud": -66.20278,
+      "timestamp": 1769543820000,
+      "temperatura": 30.0,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 5,
+      "nombre": "Batavia",
+      "latitud": -34.77845,
+      "longitud": -65.68851,
+      "timestamp": 1769543940000,
+      "temperatura": 30.0,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 6,
+      "nombre": "Beazley",
+      "latitud": -33.75676,
+      "longitud": -66.64833,
+      "timestamp": 1769543880000,
+      "temperatura": 35.1,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 7,
+      "nombre": "Buena Esperanza",
+      "latitud": -34.75682,
+      "longitud": -65.25261,
+      "timestamp": 1769544060000,
+      "temperatura": 27.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1734,
+      "nombre": "Caldenadas",
+      "latitud": -33.2497222222222,
+      "longitud": -65.1575,
+      "timestamp": 1764926100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1735,
+      "nombre": "Cañada Honda",
+      "latitud": -32.8305555555556,
+      "longitud": -66.0330555555556,
+      "timestamp": 1769541300000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1736,
+      "nombre": "Carolina",
+      "latitud": -32.8133333333333,
+      "longitud": -66.0936111111111,
+      "timestamp": 1769538600000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1737,
+      "nombre": "Cerros Largos",
+      "latitud": -32.8355555555556,
+      "longitud": -65.9027777777778,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1739,
+      "nombre": "Cienaga de INTI Huasi",
+      "latitud": -32.9291666666667,
+      "longitud": -65.94,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1738,
+      "nombre": "Colonia Los Manantiales",
+      "latitud": -33.5233333333333,
+      "longitud": -65.3725,
+      "timestamp": 1764345600000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 8,
+      "nombre": "Concarán",
+      "latitud": -32.55445,
+      "longitud": -65.24881,
+      "timestamp": 1769543940000,
+      "temperatura": 26.9,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 49,
+      "nombre": "Coronel Alzogaray",
+      "latitud": -33.46051,
+      "longitud": -65.42903,
+      "timestamp": 1769543940000,
+      "temperatura": 23.4,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 9,
+      "nombre": "Desaguadero",
+      "latitud": -33.40499,
+      "longitud": -67.1494,
+      "timestamp": 1769543940000,
+      "temperatura": 35.3,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 90,
+      "nombre": "Dique Antonio E. Aguero-Río Grande",
+      "latitud": -33.058796,
+      "longitud": -66.078287,
+      "timestamp": 1769542920000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 77,
+      "nombre": "Dique La Huertita",
+      "latitud": -32.4027,
+      "longitud": -65.7231,
+      "timestamp": 1769543700000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 78,
+      "nombre": "Dique Las Palmeras",
+      "latitud": -32.62246,
+      "longitud": -66.14407,
+      "timestamp": 1769542740000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 85,
+      "nombre": "Donovan",
+      "latitud": -33.337614,
+      "longitud": -66.232069,
+      "timestamp": 1769543400000,
+      "temperatura": 28.9,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 10,
+      "nombre": "El Amago",
+      "latitud": -32.72055,
+      "longitud": -66.1628,
+      "timestamp": 1769543940000,
+      "temperatura": 20.5,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 65,
+      "nombre": "El Arenal",
+      "latitud": -32.70029,
+      "longitud": -66.01374,
+      "timestamp": 1748877720000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1749,
+      "nombre": "El Manantial Escondido",
+      "latitud": -33.1025,
+      "longitud": -65.8736111111111,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1740,
+      "nombre": "El Morro",
+      "latitud": -33.2122222222222,
+      "longitud": -65.4916666666667,
+      "timestamp": 1769427900000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 47,
+      "nombre": "El Trapiche",
+      "latitud": -33.102925,
+      "longitud": -66.05738056,
+      "timestamp": 1769543880000,
+      "temperatura": 27.0,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1741,
+      "nombre": "Eleodoro Lobos",
+      "latitud": -33.3986111111111,
+      "longitud": -66.0138888888889,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 91,
+      "nombre": "Embalse la Florida",
+      "latitud": -33.1147222,
+      "longitud": -66.0036111111,
+      "timestamp": 1769543280000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 55,
+      "nombre": "Estancia Grande",
+      "latitud": -33.19227,
+      "longitud": -66.13736,
+      "timestamp": 1769526000000,
+      "temperatura": 17.4,
+      "precipitacion": 0.4
+    },
+    {
+      "id": 68,
+      "nombre": "Estancia Samay-Huasi",
+      "latitud": -32.7916944444444,
+      "longitud": -66.0483916666667,
+      "timestamp": 1748877300000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 89,
+      "nombre": "Filo-Merlo",
+      "latitud": -32.3775,
+      "longitud": -64.925833,
+      "timestamp": 1769543340000,
+      "temperatura": 15.2,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 12,
+      "nombre": "Fraga",
+      "latitud": -33.50133,
+      "longitud": -65.79225,
+      "timestamp": 1769543880000,
+      "temperatura": 26.8,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 67,
+      "nombre": "Frías",
+      "latitud": -32.56616,
+      "longitud": -65.90248,
+      "timestamp": 1652242500000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1743,
+      "nombre": "INTI Huasi",
+      "latitud": -32.8358333333333,
+      "longitud": -65.9616666666667,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1744,
+      "nombre": "Juan Llerena",
+      "latitud": -33.2805555555556,
+      "longitud": -65.6119444444444,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 13,
+      "nombre": "Justo Daract",
+      "latitud": -33.85085,
+      "longitud": -65.17382,
+      "timestamp": 1769392980000,
+      "temperatura": 28.1,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 14,
+      "nombre": "La Angelina",
+      "latitud": -34.36133,
+      "longitud": -65.32747,
+      "timestamp": 1769543940000,
+      "temperatura": 27.4,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 50,
+      "nombre": "La Botija",
+      "latitud": -32.23766,
+      "longitud": -66.57863,
+      "timestamp": 1769543940000,
+      "temperatura": 34.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 15,
+      "nombre": "La Calera",
+      "latitud": -32.87713,
+      "longitud": -66.84113,
+      "timestamp": 1769544000000,
+      "temperatura": 29.7,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 84,
+      "nombre": "La Candelaria",
+      "latitud": -32.0597783,
+      "longitud": -65.8379497,
+      "timestamp": 946695600000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 83,
+      "nombre": "La Carolina",
+      "latitud": -32.8131858,
+      "longitud": -66.1010175,
+      "timestamp": 946695600000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 16,
+      "nombre": "La Cumbre",
+      "latitud": -33.34238,
+      "longitud": -66.12125,
+      "timestamp": 1769543880000,
+      "temperatura": 29.1,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 17,
+      "nombre": "La Esquina",
+      "latitud": -33.14587,
+      "longitud": -65.37258,
+      "timestamp": 1769543940000,
+      "temperatura": 20.3,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 66,
+      "nombre": "La Estancia",
+      "latitud": -32.68217,
+      "longitud": -65.93995,
+      "timestamp": 1745091840000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 87,
+      "nombre": "La Florida - Dique",
+      "latitud": -33.1142,
+      "longitud": -66.0041,
+      "timestamp": 1769011980000,
+      "temperatura": 28.5,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1745,
+      "nombre": "La Petra - Esc. 238 Clodoveo",
+      "latitud": -33.2505555555556,
+      "longitud": -65.9975,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 19,
+      "nombre": "La Punilla",
+      "latitud": -33.14373,
+      "longitud": -65.0837,
+      "timestamp": 1769543940000,
+      "temperatura": 14.3,
+      "precipitacion": 0.1
+    },
+    {
+      "id": 20,
+      "nombre": "La Punta",
+      "latitud": -33.15642,
+      "longitud": -66.31473,
+      "timestamp": 1769543940000,
+      "temperatura": 29.7,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1746,
+      "nombre": "La Represa",
+      "latitud": -33.5427777777778,
+      "longitud": -65.8697222222222,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 21,
+      "nombre": "La Toma",
+      "latitud": -33.05243,
+      "longitud": -65.61933,
+      "timestamp": 1769543880000,
+      "temperatura": 22.3,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 22,
+      "nombre": "La Tranca",
+      "latitud": -32.33969,
+      "longitud": -67.2662,
+      "timestamp": 1769543940000,
+      "temperatura": 32.8,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 23,
+      "nombre": "Lafinur",
+      "latitud": -32.05826,
+      "longitud": -65.34197,
+      "timestamp": 1769543940000,
+      "temperatura": 31.2,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 61,
+      "nombre": "Laguna Larga",
+      "latitud": -32.61839,
+      "longitud": -65.7442,
+      "timestamp": 1769543520000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1733,
+      "nombre": "Las Barranquitas",
+      "latitud": -33.1686111111111,
+      "longitud": -66.0613888888889,
+      "timestamp": 1768688100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 56,
+      "nombre": "Las Chacras",
+      "latitud": -33.26172,
+      "longitud": -66.24302,
+      "timestamp": 1769543940000,
+      "temperatura": 29.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 62,
+      "nombre": "Las Chacras(San Martín)",
+      "latitud": -32.5672,
+      "longitud": -65.7782,
+      "timestamp": 1769543160000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1747,
+      "nombre": "Lavaisse",
+      "latitud": -33.8236111111111,
+      "longitud": -65.425,
+      "timestamp": 1769456700000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1748,
+      "nombre": "Liborio Luna",
+      "latitud": -33.5875,
+      "longitud": -65.6352777777778,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 54,
+      "nombre": "Los Coros",
+      "latitud": -33.63525,
+      "longitud": -66.51341,
+      "timestamp": 1769543940000,
+      "temperatura": 32.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 81,
+      "nombre": "Luján",
+      "latitud": -32.3684,
+      "longitud": -65.93391,
+      "timestamp": 946695600000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 26,
+      "nombre": "Martín de Loyola",
+      "latitud": -35.71217,
+      "longitud": -66.35322,
+      "timestamp": 1769543940000,
+      "temperatura": 32.5,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 27,
+      "nombre": "Merlo",
+      "latitud": -32.33348,
+      "longitud": -65.01432,
+      "timestamp": 1769543760000,
+      "temperatura": 28.3,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 48,
+      "nombre": "Merlo Alto",
+      "latitud": -32.35308,
+      "longitud": -64.96828,
+      "timestamp": 1769543940000,
+      "temperatura": 27.0,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 69,
+      "nombre": "Mesilla del Cura",
+      "latitud": -32.44753,
+      "longitud": -65.82601,
+      "timestamp": 1665461700000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 28,
+      "nombre": "Naschel",
+      "latitud": -32.91946,
+      "longitud": -65.37194,
+      "timestamp": 1769543940000,
+      "temperatura": 21.2,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 44,
+      "nombre": "Navia",
+      "latitud": -34.77453,
+      "longitud": -66.5858,
+      "timestamp": 1769544000000,
+      "temperatura": 32.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 29,
+      "nombre": "Nogolí",
+      "latitud": -32.9188,
+      "longitud": -66.32607,
+      "timestamp": 1769543640000,
+      "temperatura": 30.5,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 30,
+      "nombre": "Nueva Galia",
+      "latitud": -35.11305,
+      "longitud": -65.25683,
+      "timestamp": 1769543940000,
+      "temperatura": 27.2,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1750,
+      "nombre": "Paso de las Carretas",
+      "latitud": -33.3288888888889,
+      "longitud": -65.8775,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1751,
+      "nombre": "Paso del Rey",
+      "latitud": -32.9455555555556,
+      "longitud": -66.0027777777778,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 31,
+      "nombre": "Paso Grande",
+      "latitud": -32.87672,
+      "longitud": -65.63421,
+      "timestamp": 1769543940000,
+      "temperatura": 23.9,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1752,
+      "nombre": "Pedernera",
+      "latitud": -33.7897222222222,
+      "longitud": -65.2952777777778,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 51,
+      "nombre": "Potrero de los Funes",
+      "latitud": -33.23122,
+      "longitud": -66.22822,
+      "timestamp": 1769543940000,
+      "temperatura": 29.1,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 53,
+      "nombre": "Quebrada de las Higueritas",
+      "latitud": -32.39472,
+      "longitud": -65.91894,
+      "timestamp": 1769543940000,
+      "temperatura": 31.4,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 82,
+      "nombre": "Quines",
+      "latitud": -32.05322,
+      "longitud": -65.72144,
+      "timestamp": 946695600000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1742,
+      "nombre": "Riocito",
+      "latitud": -33.06,
+      "longitud": -65.9841666666667,
+      "timestamp": 1769541300000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1753,
+      "nombre": "Saladillo - Centro Cultural",
+      "latitud": -33.2036111111111,
+      "longitud": -65.8602777777778,
+      "timestamp": 1769543100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 32,
+      "nombre": "San Francisco",
+      "latitud": -32.60059,
+      "longitud": -66.12823,
+      "timestamp": 1769544060000,
+      "temperatura": 28.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 46,
+      "nombre": "San Luis Rural",
+      "latitud": -33.33604,
+      "longitud": -66.43529,
+      "timestamp": 1769543940000,
+      "temperatura": 32.8,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 34,
+      "nombre": "San Martín",
+      "latitud": -32.41002,
+      "longitud": -65.67489,
+      "timestamp": 1769543820000,
+      "temperatura": 27.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 36,
+      "nombre": "San Miguel",
+      "latitud": -32.14099,
+      "longitud": -65.81574,
+      "timestamp": 1769543940000,
+      "temperatura": 31.1,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1754,
+      "nombre": "Santa Isabel",
+      "latitud": -32.9361111111111,
+      "longitud": -65.8352777777778,
+      "timestamp": 1764350100000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 35,
+      "nombre": "Santa Rosa",
+      "latitud": -32.34359,
+      "longitud": -65.20872,
+      "timestamp": 1769543880000,
+      "temperatura": 33.7,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 52,
+      "nombre": "Soven",
+      "latitud": -34.17522,
+      "longitud": -65.33552,
+      "timestamp": 1769543940000,
+      "temperatura": 27.3,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 63,
+      "nombre": "Tala Verde",
+      "latitud": -32.40886,
+      "longitud": -65.56191,
+      "timestamp": 1769543220000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 37,
+      "nombre": "Tilisarao",
+      "latitud": -32.73375,
+      "longitud": -65.29536,
+      "timestamp": 1769543880000,
+      "temperatura": 25.5,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 38,
+      "nombre": "Unión",
+      "latitud": -35.1546,
+      "longitud": -65.94489,
+      "timestamp": 1769543940000,
+      "temperatura": 30.5,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 45,
+      "nombre": "Valle de Pancanta",
+      "latitud": -32.87029,
+      "longitud": -66.10596,
+      "timestamp": 1769543940000,
+      "temperatura": 24.3,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 86,
+      "nombre": "Varela",
+      "latitud": -34.1225,
+      "longitud": -66.463889,
+      "timestamp": 1769543940000,
+      "temperatura": 30.5,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 39,
+      "nombre": "Villa de Praga",
+      "latitud": -32.53259,
+      "longitud": -65.64681,
+      "timestamp": 1769543940000,
+      "temperatura": 26.2,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 40,
+      "nombre": "Villa Gral. Roca",
+      "latitud": -32.66487,
+      "longitud": -66.45049,
+      "timestamp": 1769544000000,
+      "temperatura": 26.6,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 41,
+      "nombre": "Villa Larca",
+      "latitud": -32.61817,
+      "longitud": -64.98036,
+      "timestamp": 1769543940000,
+      "temperatura": 25.9,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 42,
+      "nombre": "Villa Mercedes",
+      "latitud": -33.678586,
+      "longitud": -65.504645,
+      "timestamp": 1769543940000,
+      "temperatura": 25.0,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 60,
+      "nombre": "Villa Reynolds",
+      "latitud": -33.725452,
+      "longitud": -65.385817,
+      "timestamp": 1769543940000,
+      "temperatura": 25.0,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 1755,
+      "nombre": "Virorco",
+      "latitud": -33.1094444444444,
+      "longitud": -66.1091666666667,
+      "timestamp": 1761292800000,
+      "temperatura": 14.7,
+      "precipitacion": 2.3
+    },
+    {
+      "id": 1756,
+      "nombre": "Vizcacheras",
+      "latitud": -33.6036111111111,
+      "longitud": -65.1925,
+      "timestamp": 1769542200000,
+      "temperatura": null,
+      "precipitacion": 0.0
+    },
+    {
+      "id": 43,
+      "nombre": "Zanjitas",
+      "latitud": -33.80497,
+      "longitud": -66.41587,
+      "timestamp": 1769543820000,
+      "temperatura": 32.9,
+      "precipitacion": 0.0
+    }
+  ],
+  "exito": true,
+  "error": null,
+  "usando_cache": false,
+  "timestamp_guardado": "2026-01-27T16:59:29.144015"
+}
